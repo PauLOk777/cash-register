@@ -1,8 +1,8 @@
 package com.paulok777.model.service;
 
 import com.paulok777.model.dto.ProductDTO;
-import com.paulok777.model.entity.Page;
-import com.paulok777.model.entity.Pageable;
+import com.paulok777.model.util.Page;
+import com.paulok777.model.util.Pageable;
 import com.paulok777.model.entity.Product;
 import com.paulok777.model.exception.cash_register_exc.order_exc.NoSuchProductException;
 import com.paulok777.model.exception.cash_register_exc.product_exc.DuplicateCodeOrNameException;
