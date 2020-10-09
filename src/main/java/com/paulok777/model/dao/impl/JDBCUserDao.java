@@ -26,7 +26,7 @@ public class JDBCUserDao implements UserDao {
     }
 
     @Override
-    public User findById(int id) {
+    public Optional<User> findById(long id) {
         return null;
     }
 
@@ -41,7 +41,7 @@ public class JDBCUserDao implements UserDao {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(long id) {
 
     }
 

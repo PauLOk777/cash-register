@@ -23,12 +23,7 @@ public class JDBCProductDao implements ProductDao {
     }
 
     @Override
-    public Optional<Product> findByCode(String code) {
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<Product> findByName(String name) {
+    public Optional<Product> findByIdentifier(String identifier) {
         return Optional.empty();
     }
 
@@ -43,7 +38,7 @@ public class JDBCProductDao implements ProductDao {
     }
 
     @Override
-    public Product findById(int id) {
+    public Optional<Product> findById(long id) {
         return null;
     }
 
@@ -58,7 +53,7 @@ public class JDBCProductDao implements ProductDao {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(long id) {
 
     }
 

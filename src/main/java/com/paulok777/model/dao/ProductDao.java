@@ -9,9 +9,7 @@ import java.util.Optional;
 public interface ProductDao extends GenericDao<Product> {
     void updateAmountById(Long amount, Long id);
 
-    Optional<Product> findByCode(String code);
-
-    Optional<Product> findByName(String name);
+    Optional<Product> findByIdentifier(String identifier);
 
     Page<Product> findByOrderByName(Pageable pageable);
 }

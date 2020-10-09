@@ -1,5 +1,7 @@
 package com.paulok777.model.service;
 
+import com.paulok777.model.dao.DaoFactory;
+import com.paulok777.model.dao.OrderDao;
 import com.paulok777.model.dto.ReportDTO;
 import com.paulok777.model.entity.Order;
 import com.paulok777.model.entity.Order.OrderStatus;
@@ -9,7 +11,6 @@ import com.paulok777.model.exception.cash_register_exc.InvalidIdException;
 import com.paulok777.model.exception.cash_register_exc.order_exc.IllegalOrderStateException;
 import com.paulok777.model.exception.cash_register_exc.order_exc.NoSuchProductException;
 import com.paulok777.model.exception.cash_register_exc.product_exc.NotEnoughProductsException;
-//import com.paulok777.repository.OrderRepository;
 import com.paulok777.controller.util.ExceptionKeys;
 
 import java.time.LocalDateTime;
@@ -17,30 +18,35 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class OrderService {
-//    private final OrderRepository orderRepository;
+    private final DaoFactory daoFactory;
     private final UserService userService;
     private final ProductService productService;
 
-    public OrderService(final UserService userService, final ProductService productService) {
+    public OrderService(final DaoFactory daoFactory, final UserService userService, final ProductService productService) {
+        this.daoFactory = daoFactory;
         this.userService = userService;
         this.productService = productService;
     }
 
-//    public List<Order> getOrders() {
-//        return orderRepository.findByStatusOrderByCreateDateDesc(OrderStatus.NEW);
-//    }
+    public List<Order> getOrders() {
+        try (OrderDao orderDao = daoFactory.createOrderDao()) {
+            return orderDao.findByStatusOrderByCreateDateDesc(OrderStatus.NEW);
+        }
+    }
 
-//    public Order saveNewOrder() {
-//        return orderRepository.save(
-//                Order.builder()
-//                        .totalPrice(0L)
-//                        .createDate(LocalDateTime.now())
-//                        .status(OrderStatus.NEW)
-//                        .user(userService.getCurrentUser())
-//                        .orderProducts(new ArrayList<>())
-//                        .build()
-//        );
-//    }
+    public void saveNewOrder() {
+        try (OrderDao orderDao = daoFactory.createOrderDao()) {
+            orderDao.create(
+                    Order.builder()
+                            .totalPrice(0L)
+                            .createDate(LocalDateTime.now())
+                            .status(OrderStatus.NEW)
+                            .user(userService.getCurrentUser())
+                            .orderProducts(new HashSet<>())
+                            .build()
+            );
+        }
+    }
 
     public Map<Long, Product> getProductsByOrderId(String id) {
         Order order = getOrderById(id);
@@ -66,7 +72,9 @@ public class OrderService {
 
         addProductToOrder(amount, order, product);
 
-//        orderRepository.save(order);
+        try (OrderDao orderDao = daoFactory.createOrderDao()){
+            orderDao.update(order);
+        }
         productService.saveProduct(product);
     }
 
@@ -106,7 +114,9 @@ public class OrderService {
 
         calculateDataAfterChangingAmount(amount, order, product, orderProducts);
 
-//        orderRepository.save(order);
+        try (OrderDao orderDao = daoFactory.createOrderDao()) {
+            orderDao.update(order);
+        }
     }
 
     private void calculateDataAfterChangingAmount(Long amount, Order order, Product product, OrderProducts orderProducts) {
@@ -140,8 +150,8 @@ public class OrderService {
     }
 
     public void makeStatusClosed(String id) {
-        try {
-//            orderRepository.changeStatusToClosed(Long.valueOf(id), OrderStatus.CLOSED);
+        try (OrderDao orderDao = daoFactory.createOrderDao()){
+            orderDao.changeStatusToClosed(Long.valueOf(id), OrderStatus.CLOSED);
         } catch (NumberFormatException e) {
 //            log.warn("(username: {}) {}}.",
 //                    userService.getCurrentUser().getUsername(), ExceptionKeys.INVALID_ID_EXCEPTION);
@@ -160,7 +170,9 @@ public class OrderService {
         });
 
         order.setStatus(OrderStatus.CANCELED);
-//        orderRepository.save(order);
+        try (OrderDao orderDao = daoFactory.createOrderDao()) {
+            orderDao.update(order);
+        }
     }
 
 //    @Transactional
@@ -178,13 +190,14 @@ public class OrderService {
 
         order.getOrderProducts().add(orderProducts);
 
-//        orderRepository.save(order);
+        try (OrderDao orderDao = daoFactory.createOrderDao()) {
+            orderDao.update(order);
+        }
     }
 
     public Order getOrderById(String id) {
-        try {
-//            return parseOptionalAndThrowInvalidId(orderRepository.findById(Long.parseLong(id)));
-            return null;
+        try (OrderDao orderDao = daoFactory.createOrderDao()){
+            return parseOptionalAndThrowInvalidId(orderDao.findById(Long.parseLong(id)));
         } catch (NumberFormatException e) {
 //            log.warn("(username: {}) {}}.",
 //                    userService.getCurrentUser().getUsername(), ExceptionKeys.INVALID_ID_EXCEPTION);
@@ -243,8 +256,9 @@ public class OrderService {
     }
 
     private List<Order> getClosedOrders() {
-//        return orderRepository.findByStatus(OrderStatus.CLOSED);
-        return null;
+        try (OrderDao orderDao = daoFactory.createOrderDao()) {
+            return orderDao.findByStatus(OrderStatus.CLOSED);
+        }
     }
 
     private ReportDTO getReportInfo(List<Order> orders) {
@@ -261,7 +275,9 @@ public class OrderService {
     public void archiveOrders(List<Order> orders) {
         orders.forEach(order -> {
             order.setStatus(OrderStatus.ARCHIVED);
-//            orderRepository.save(order);
+            try (OrderDao orderDao = daoFactory.createOrderDao()) {
+                orderDao.update(order);
+            }
         });
     }
 }

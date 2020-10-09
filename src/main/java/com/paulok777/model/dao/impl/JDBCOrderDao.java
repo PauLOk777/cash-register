@@ -6,6 +6,7 @@ import com.paulok777.model.entity.Order;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public class JDBCOrderDao implements OrderDao {
     private final Connection connection;
@@ -35,7 +36,7 @@ public class JDBCOrderDao implements OrderDao {
     }
 
     @Override
-    public Order findById(int id) {
+    public Optional<Order> findById(long id) {
         return null;
     }
 
@@ -50,7 +51,7 @@ public class JDBCOrderDao implements OrderDao {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(long id) {
 
     }
 
