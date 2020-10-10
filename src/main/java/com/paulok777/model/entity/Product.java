@@ -3,7 +3,6 @@ package com.paulok777.model.entity;
 import com.paulok777.model.dto.ProductDTO;
 
 import java.util.Objects;
-import java.util.Set;
 
 public class Product {
     private Long id;
