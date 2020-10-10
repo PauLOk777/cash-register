@@ -8,6 +8,13 @@ import java.sql.SQLException;
 public class ProductMapper implements ObjectMapper<Product> {
     @Override
     public Product extractWithoutRelationsFromResultSet(ResultSet rs) throws SQLException {
-        return null;
+        return Product.builder()
+                .id(rs.getLong("id"))
+                .code(rs.getString("code"))
+                .name(rs.getString("name"))
+                .price(rs.getInt("price"))
+                .measure(Product.Measure.valueOf(rs.getString("measure")))
+                .amount(rs.getLong("amount"))
+                .build();
     }
 }

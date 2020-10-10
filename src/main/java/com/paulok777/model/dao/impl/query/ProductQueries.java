@@ -7,5 +7,6 @@ public class ProductQueries {
     public static final String FIND_BY_IDENTIFIER = FIND_ALL + " where code = ? or name = ?";
     public static final String FIND_ALL_ORDER_BY_NAME = FIND_ALL + " order by name";
     public static final String UPDATE = "update products set code = ?, name = ?, price = ?, measure = ?, amount = ? where id = ?";
+    public static final String UPDATE_AMOUNT = "update products set amount = ? where id = ?";
     public static final String DELETE = "delete from products where id = ?";
 }

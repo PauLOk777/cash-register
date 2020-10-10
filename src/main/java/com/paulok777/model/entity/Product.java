@@ -3,6 +3,7 @@ package com.paulok777.model.entity;
 import com.paulok777.model.dto.ProductDTO;
 
 import java.util.Objects;
+import java.util.Set;
 
 public class Product {
     private Long id;
@@ -98,5 +99,55 @@ public class Product {
     @Override
     public int hashCode() {
         return Objects.hash(id, code, name, price, amount, measure);
+    }
+
+    public static Product.ProductBuilder builder() {
+        return new Product.ProductBuilder();
+    }
+
+    public static class ProductBuilder {
+        private Long id;
+        private String code;
+        private String name;
+        private Integer price;
+        private Long amount;
+        private Measure measure;
+
+        ProductBuilder() {
+        }
+
+        public Product.ProductBuilder id(final Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Product.ProductBuilder code(final String code) {
+            this.code = code;
+            return this;
+        }
+
+        public Product.ProductBuilder name(final String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Product.ProductBuilder price(final Integer price) {
+            this.price = price;
+            return this;
+        }
+
+        public Product.ProductBuilder amount(final Long amount) {
+            this.amount = amount;
+            return this;
+        }
+
+        public Product.ProductBuilder measure(final Measure measure) {
+            this.measure = measure;
+            return this;
+        }
+
+        public Product build() {
+            return new Product(id, code, name, price, amount, measure);
+        }
     }
 }

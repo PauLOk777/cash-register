@@ -36,19 +36,4 @@ public class DispatcherServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         super.doPost(req, resp);
     }
-
-    @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String path = req.getRequestURI();
-
-        Command command = commands.getOrDefault(path,
-                (r) -> "index");
-        String result = command.execute(req);
-
-        if (result.contains(REDIRECT)) {
-            resp.sendRedirect(result.replace(REDIRECT, ""));
-        } else {
-            req.getRequestDispatcher(result).forward(req, resp);
-        }
-    }
 }

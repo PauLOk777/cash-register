@@ -97,6 +97,7 @@ public class JDBCUserDao implements UserDao {
     public void delete(long id) {
         try (PreparedStatement statement = connection.prepareStatement(UserQueries.DELETE)) {
             statement.setLong(1, id);
+            statement.execute();
         } catch (SQLException e) {
             throw new RuntimeException();
         }
