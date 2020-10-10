@@ -1,9 +1,11 @@
 package com.paulok777.model.dao.impl;
 
 import com.paulok777.model.dao.UserDao;
+import com.paulok777.model.dao.impl.query.UserQueries;
 import com.paulok777.model.entity.User;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +24,11 @@ public class JDBCUserDao implements UserDao {
 
     @Override
     public void create(User entity) {
-
+//        try (PreparedStatement ps = connection.prepareStatement(UserQueries.CREATE)) {
+//
+//        } catch (SQLException e) {
+//
+//        }
     }
 
     @Override

@@ -1,10 +1,12 @@
 CREATE TABLE "users" (
 	"id" SERIAL PRIMARY KEY ,
-	"first_name" VARCHAR(50) NOT NULL,
-	"patronymic" VARCHAR(50) NOT NULL,
-	"last_name" VARCHAR(50) NOT NULL,
-	"role" VARCHAR(50),
-	"phone_number" VARCHAR(20) NOT NULL
+	"first_name" VARCHAR(60) NOT NULL,
+	"last_name" VARCHAR(60) NOT NULL,
+	"username" VARCHAR(20) NOT NULL,
+	"password" VARCHAR(255) NOT NULL,
+	"email" VARCHAR(255) NOT NULL,
+	"phone_number" VARCHAR(13) NOT NULL,
+	"role" VARCHAR(50)
 );
 
 CREATE TABLE "order" (
@@ -18,14 +20,15 @@ CREATE TABLE "order" (
 CREATE TABLE "order_products" (
 	"order_id" INTEGER NOT NULL,
 	"product_id" INTEGER NOT NULL,
-	"count" INTEGER NOT NULL
+	"amount" INTEGER NOT NULL,
+	UNIQUE (order_id, product_id)
 );
 
 CREATE TABLE "products" (
 	"code" INTEGER PRIMARY KEY,
 	"name" VARCHAR(255) NOT NULL,
 	"price" INTEGER NOT NULL,
-	"count" INTEGER NOT NULL,
+	"amount" INTEGER NOT NULL,
 	"measure" VARCHAR(20) NOT NULL
 );
 
