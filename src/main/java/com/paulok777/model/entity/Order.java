@@ -1,6 +1,7 @@
 package com.paulok777.model.entity;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -10,7 +11,7 @@ public class Order {
     private LocalDateTime createDate;
     private OrderStatus status;
     private User user;
-    private Set<OrderProducts> orderProducts;
+    private Set<OrderProducts> orderProducts = new HashSet<>();
 
     public enum OrderStatus {
         NEW,

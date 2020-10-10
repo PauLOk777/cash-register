@@ -5,7 +5,7 @@ import com.paulok777.model.dao.UserDao;
 import com.paulok777.model.dto.UserDTO;
 import com.paulok777.model.entity.User;
 import com.paulok777.model.exception.cash_register_exc.registration_exc.DuplicateUsernameException;
-import com.paulok777.controller.util.ExceptionKeys;
+import com.paulok777.model.util.ExceptionKeys;
 
 public class UserService {
     private final DaoFactory daoFactory;

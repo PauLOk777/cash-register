@@ -8,7 +8,7 @@ import com.paulok777.model.util.Pageable;
 import com.paulok777.model.entity.Product;
 import com.paulok777.model.exception.cash_register_exc.order_exc.NoSuchProductException;
 import com.paulok777.model.exception.cash_register_exc.product_exc.DuplicateCodeOrNameException;
-import com.paulok777.controller.util.ExceptionKeys;
+import com.paulok777.model.util.ExceptionKeys;
 
 import java.util.Optional;
 

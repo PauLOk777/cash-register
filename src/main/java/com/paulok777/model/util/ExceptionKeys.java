@@ -1,4 +1,4 @@
-package com.paulok777.controller.util;
+package com.paulok777.model.util;
 
 public class ExceptionKeys {
     public static final String INVALID_ID_EXCEPTION = "exception.invalid.id";

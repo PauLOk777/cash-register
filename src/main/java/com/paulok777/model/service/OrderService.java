@@ -11,7 +11,7 @@ import com.paulok777.model.exception.cash_register_exc.InvalidIdException;
 import com.paulok777.model.exception.cash_register_exc.order_exc.IllegalOrderStateException;
 import com.paulok777.model.exception.cash_register_exc.order_exc.NoSuchProductException;
 import com.paulok777.model.exception.cash_register_exc.product_exc.NotEnoughProductsException;
-import com.paulok777.controller.util.ExceptionKeys;
+import com.paulok777.model.util.ExceptionKeys;
 
 import java.time.LocalDateTime;
 import java.util.*;

@@ -3,6 +3,7 @@ package com.paulok777.controller.util;
 import com.paulok777.model.dto.ProductDTO;
 import com.paulok777.model.dto.UserDTO;
 import com.paulok777.model.exception.cash_register_exc.FieldValidationException;
+import com.paulok777.model.util.ExceptionKeys;
 
 public class Validator {
     public static void validateUser(UserDTO userDTO, String username) {
