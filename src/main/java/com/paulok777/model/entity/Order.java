@@ -11,7 +11,7 @@ public class Order {
     private LocalDateTime createDate;
     private OrderStatus status;
     private User user;
-    private Set<OrderProducts> orderProducts = new HashSet<>();
+    private Set<OrderProducts> orderProducts;
 
     public enum OrderStatus {
         NEW,
@@ -73,7 +73,7 @@ public class Order {
         return orderProducts;
     }
 
-    public void setProducts(Set<OrderProducts> orderProducts) {
+    public void setOrderProducts(Set<OrderProducts> orderProducts) {
         this.orderProducts = orderProducts;
     }
 
@@ -104,7 +104,7 @@ public class Order {
         private LocalDateTime createDate;
         private OrderStatus status;
         private User user;
-        private Set<OrderProducts> orderProducts;
+        private Set<OrderProducts> orderProducts = new HashSet<>();
 
         OrderBuilder() {
         }

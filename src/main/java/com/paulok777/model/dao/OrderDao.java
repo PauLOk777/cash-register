@@ -10,4 +10,6 @@ public interface OrderDao extends GenericDao<Order> {
     List<Order> findByStatusOrderByCreateDateDesc(Order.OrderStatus status);
 
     List<Order> findByStatus(Order.OrderStatus status);
+
+    void updateWithRelations(Order order);
 }

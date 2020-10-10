@@ -5,7 +5,17 @@ import java.util.Objects;
 public class OrderProducts {
     private Order order;
     private Product product;
-    Long amount;
+    private Long amount;
+
+    public OrderProducts() {
+
+    }
+
+    public OrderProducts(Order order, Product product, Long amount) {
+        this.order = order;
+        this.product = product;
+        this.amount = amount;
+    }
 
     public Order getOrder() {
         return order;

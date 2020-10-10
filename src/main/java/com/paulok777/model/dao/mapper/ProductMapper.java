@@ -4,6 +4,7 @@ import com.paulok777.model.entity.Product;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
 
 public class ProductMapper implements ObjectMapper<Product> {
     @Override
@@ -16,5 +17,11 @@ public class ProductMapper implements ObjectMapper<Product> {
                 .measure(Product.Measure.valueOf(rs.getString("measure")))
                 .amount(rs.getLong("amount"))
                 .build();
+    }
+
+    @Override
+    public Product makeUnique(Map<Long, Product> cache, Product entity) {
+        cache.putIfAbsent(entity.getId(), entity);
+        return cache.get(entity.getId());
     }
 }

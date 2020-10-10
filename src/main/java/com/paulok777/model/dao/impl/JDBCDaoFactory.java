@@ -8,7 +8,6 @@ import com.paulok777.model.dao.UserDao;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.HashSet;
 
 public class JDBCDaoFactory extends DaoFactory {
     private final DataSource dataSource = ConnectionPoolHolder.getDataSource();
@@ -20,7 +19,6 @@ public class JDBCDaoFactory extends DaoFactory {
 
     @Override
     public OrderDao createOrderDao() {
-
         return new JDBCOrderDao(getConnection());
     }
 
