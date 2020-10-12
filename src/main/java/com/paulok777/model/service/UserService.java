@@ -30,7 +30,7 @@ public class UserService {
             return userDao.findByUsername(
 //                    SecurityContextHolder.getContext().getAuthentication().getName()
                     "Hello"
-            ).orElseThrow();
+            ).orElseThrow(RuntimeException::new);
         }
     }
 }

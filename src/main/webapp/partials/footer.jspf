@@ -1,0 +1,5 @@
+<footer class="mt-auto">
+    <div class="footer-copyright text-center py-3">
+        <fmt:message key="cashRegister"/>. <fmt:message key="copyright"/> &copy; 2020 <fmt:message key="authorFullName"/>.
+    </div>
+</footer>

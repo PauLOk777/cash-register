@@ -1,6 +1,8 @@
 package com.paulok777.controller;
 
 import com.paulok777.controller.command.Command;
+import com.paulok777.controller.command.impl.*;
+import com.paulok777.model.service.ServiceFactory;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -13,7 +15,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DispatcherServlet extends HttpServlet {
-    private final Map<String, Command> commands = new ConcurrentHashMap<>();
+    private final Map<String, Command> getCommands = new ConcurrentHashMap<>();
+    private final Map<String, Command> postCommands = new ConcurrentHashMap<>();
     private static final String REDIRECT = "redirect:";
 
     @Override
@@ -23,17 +26,26 @@ public class DispatcherServlet extends HttpServlet {
                 .setAttribute("loggedUsers", new HashSet<String>());
     }
 
-    private void putAllCommands() {
+    private void putGetCommands() {
+        getCommands.put("index", new IndexCommand());
+        getCommands.put("/logout", new LogOutCommand());
+        getCommands.put("/login", new GetLoginPageCommand());
+        getCommands.put("/registration", new GetRegistrationPageCommand());
+    }
 
+    private void putPostCommands() {
+        ServiceFactory serviceFactory = ServiceFactory.getInstance();
+        postCommands.put("/login", new LogInCommand(serviceFactory.createUserService()));
+        postCommands.put("/registration", new RegistrationCommand(serviceFactory.createUserService()));
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doGet(req, resp);
+        req.getRequestDispatcher("/index.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
+        req.getRequestDispatcher("/index.jsp").forward(req, resp);
     }
 }
