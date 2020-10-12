@@ -4,7 +4,7 @@ import com.paulok777.controller.command.Command;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class ChangeAmountOfProductSeniorCashier implements Command {
+public class ChangeAmountOfProductSeniorCashierCommand implements Command {
     @Override
     public String execute(HttpServletRequest request) {
         return null;
