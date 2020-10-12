@@ -28,24 +28,26 @@ public class DispatcherServlet extends HttpServlet {
 
     private void putGetCommands() {
         getCommands.put("index", new IndexCommand());
-        getCommands.put("/logout", new LogOutCommand());
-        getCommands.put("/login", new GetLoginPageCommand());
-        getCommands.put("/registration", new GetRegistrationPageCommand());
+        getCommands.put("logout", new LogOutCommand());
+        getCommands.put("login", new GetLoginPageCommand());
+        getCommands.put("registration", new GetRegistrationPageCommand());
     }
 
     private void putPostCommands() {
         ServiceFactory serviceFactory = ServiceFactory.getInstance();
-        postCommands.put("/login", new LogInCommand(serviceFactory.createUserService()));
-        postCommands.put("/registration", new RegistrationCommand(serviceFactory.createUserService()));
+        postCommands.put("login", new LogInCommand(serviceFactory.createUserService()));
+        postCommands.put("registration", new RegistrationCommand(serviceFactory.createUserService()));
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String path = req.getRequestURI();
         req.getRequestDispatcher("/index.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String path = req.getRequestURI();
         req.getRequestDispatcher("/index.jsp").forward(req, resp);
     }
 }
