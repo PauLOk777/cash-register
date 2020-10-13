@@ -2,18 +2,14 @@ package com.paulok777.controller.command.impl;
 
 import com.paulok777.model.entity.User;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashSet;
 
 public class CommandUtility {
-    public static void setUserRole(HttpServletRequest request,
-                            User.Role role, String name) {
+    public static void setUserRole(HttpServletRequest request, User.Role role, String username) {
         HttpSession session = request.getSession();
-        ServletContext context = request.getSession().getServletContext();
-        context.setAttribute("username", name);
-        session.setAttribute("username", name);
+        session.setAttribute("username", username);
         session.setAttribute("role", role);
     }
 

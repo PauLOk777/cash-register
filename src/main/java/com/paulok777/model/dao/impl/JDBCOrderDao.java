@@ -61,6 +61,25 @@ public class JDBCOrderDao implements OrderDao {
     }
 
     @Override
+    public long createAndGetNewId(Order order) {
+        try (PreparedStatement statement = connection.prepareStatement(
+                OrderQueries.CREATE, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setTimestamp(1, Timestamp.valueOf(order.getCreateDate()));
+            statement.setString(2, order.getStatus().name());
+            statement.setLong(3, order.getTotalPrice());
+            statement.setLong(4, order.getUser().getId());
+            statement.executeUpdate();
+            ResultSet rs = statement.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException();
+        }
+        throw new RuntimeException();
+    }
+
+    @Override
     public void create(Order entity) {
         try (PreparedStatement statement = connection.prepareStatement(OrderQueries.CREATE)) {
             statement.setTimestamp(1, Timestamp.valueOf(entity.getCreateDate()));
@@ -82,6 +101,7 @@ public class JDBCOrderDao implements OrderDao {
 
         try (PreparedStatement statement = connection.prepareStatement(OrderQueries.FIND_BY_ID_WITH_RELATIONS)) {
             statement.setLong(1, id);
+
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
                 order = orderMapper.extractWithRelationsFromResultSet(rs, orders, users, products);

@@ -10,11 +10,11 @@ public class ServiceFactoryImpl extends ServiceFactory{
 
     @Override
     public OrderService createOrderService() {
-        return new OrderService(DaoFactory.getInstance(), createUserService(), createProductService());
+        return new OrderService(DaoFactory.getInstance(), createProductService(), createUserService());
     }
 
     @Override
     public ProductService createProductService() {
-        return new ProductService(DaoFactory.getInstance(), createUserService());
+        return new ProductService(DaoFactory.getInstance());
     }
 }

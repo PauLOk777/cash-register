@@ -28,8 +28,10 @@ public class OrderMapper implements ObjectMapper<Order> {
                                                    Map<Long, Product> productsCache) throws SQLException {
         Order order = makeUnique(ordersCache, extractWithoutRelationsFromResultSet(rs));
         order.setUser(userMapper.makeUnique(usersCache, userMapper.extractWithoutRelationsFromResultSet(rs)));
-        Product product = productMapper.makeUnique(productsCache, productMapper.extractWithoutRelationsFromResultSet(rs));
-        order.getOrderProducts().add(extractOrderProductsFromResultSet(rs, order, product));
+        if (rs.getString("measure") != null) {
+            Product product = productMapper.makeUnique(productsCache, productMapper.extractWithoutRelationsFromResultSet(rs));
+            order.getOrderProducts().add(extractOrderProductsFromResultSet(rs, order, product));
+        }
         return order;
     }
 

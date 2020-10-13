@@ -28,12 +28,10 @@ public class UserService {
         }
     }
 
-    public User getCurrentUser() {
+    public User getUserByUsername(String username) {
         try (UserDao userDao = daoFactory.createUserDao()) {
-            return userDao.findByUsername(
-//                    SecurityContextHolder.getContext().getAuthentication().getName()
-                    "Hello"
-            ).orElseThrow(RuntimeException::new);
+            return userDao.findByUsername(username)
+                    .orElseThrow(RuntimeException::new);
         }
     }
 

@@ -12,4 +12,6 @@ public interface OrderDao extends GenericDao<Order> {
     List<Order> findByStatus(Order.OrderStatus status);
 
     void updateWithRelations(Order order);
+
+    long createAndGetNewId(Order order);
 }

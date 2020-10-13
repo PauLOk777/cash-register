@@ -7,6 +7,7 @@ import com.paulok777.model.entity.Order;
 import com.paulok777.model.entity.Order.OrderStatus;
 import com.paulok777.model.entity.OrderProducts;
 import com.paulok777.model.entity.Product;
+import com.paulok777.model.entity.User;
 import com.paulok777.model.exception.cash_register_exc.InvalidIdException;
 import com.paulok777.model.exception.cash_register_exc.order_exc.IllegalOrderStateException;
 import com.paulok777.model.exception.cash_register_exc.order_exc.NoSuchProductException;
@@ -20,13 +21,13 @@ import com.atomikos.icatch.jta.UserTransactionImp;
 
 public class OrderService {
     private final DaoFactory daoFactory;
-    private final UserService userService;
     private final ProductService productService;
+    private final UserService userService;
 
-    public OrderService(final DaoFactory daoFactory, final UserService userService, final ProductService productService) {
+    public OrderService(final DaoFactory daoFactory, final ProductService productService, final UserService userService) {
         this.daoFactory = daoFactory;
-        this.userService = userService;
         this.productService = productService;
+        this.userService = userService;
     }
 
     public List<Order> getOrders() {
@@ -35,14 +36,14 @@ public class OrderService {
         }
     }
 
-    public void saveNewOrder() {
+    public long saveNewOrder(String username) {
         try (OrderDao orderDao = daoFactory.createOrderDao()) {
-            orderDao.create(
+            return orderDao.createAndGetNewId(
                     Order.builder()
                             .totalPrice(0L)
                             .createDate(LocalDateTime.now())
                             .status(OrderStatus.NEW)
-                            .user(userService.getCurrentUser())
+                            .user(userService.getUserByUsername(username))
                             .orderProducts(new HashSet<>())
                             .build()
             );
@@ -197,8 +198,9 @@ public class OrderService {
     }
 
     public Order getOrderById(String id) {
-        try (OrderDao orderDao = daoFactory.createOrderDao()){
-            return parseOptionalAndThrowInvalidId(orderDao.findById(Long.parseLong(id)));
+        try (OrderDao orderDao = daoFactory.createOrderDao()) {
+            Optional<Order> order = orderDao.findById(Long.parseLong(id));
+            return parseOptionalAndThrowInvalidId(order);
         } catch (NumberFormatException e) {
 //            log.warn("(username: {}) {}}.",
 //                    userService.getCurrentUser().getUsername(), ExceptionKeys.INVALID_ID_EXCEPTION);

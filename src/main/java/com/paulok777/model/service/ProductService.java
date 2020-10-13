@@ -14,11 +14,9 @@ import java.util.Optional;
 
 public class ProductService {
     private final DaoFactory daoFactory;
-    private final UserService userService;
 
-    public ProductService(final DaoFactory daoFactory, final UserService userService) {
+    public ProductService(final DaoFactory daoFactory) {
         this.daoFactory = daoFactory;
-        this.userService = userService;
     }
 
     public Page<Product> getProducts(Pageable pageable) {

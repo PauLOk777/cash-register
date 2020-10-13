@@ -1,5 +1,5 @@
 CREATE TABLE "users" (
-	"id" SERIAL PRIMARY KEY ,
+	"id" SERIAL PRIMARY KEY,
 	"first_name" VARCHAR(60) NOT NULL,
 	"last_name" VARCHAR(60) NOT NULL,
 	"username" VARCHAR(20) UNIQUE NOT NULL,
@@ -25,6 +25,7 @@ CREATE TABLE "order_products" (
 );
 
 CREATE TABLE "products" (
+    "id" SERIAL PRIMARY KEY,
 	"code" INTEGER PRIMARY KEY,
 	"name" VARCHAR(255) NOT NULL,
 	"price" INTEGER NOT NULL,
@@ -32,7 +33,7 @@ CREATE TABLE "products" (
 	"measure" VARCHAR(20) NOT NULL
 );
 
-ALTER TABLE "order" ADD CONSTRAINT "order_fk0" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE SET NULL;
+ALTER TABLE "orders" ADD CONSTRAINT "order_fk0" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE SET NULL;
 
-ALTER TABLE "order_products" ADD CONSTRAINT "order_products_fk2" FOREIGN KEY ("order_id") REFERENCES "orders"("id") ON DELETE CASCADE;
-ALTER TABLE "order_products" ADD CONSTRAINT "order_products_fk1" FOREIGN KEY ("product_id") REFERENCES "products"("code") ON DELETE CASCADE;
+ALTER TABLE "order_products" ADD CONSTRAINT "order_products_fk0" FOREIGN KEY ("order_id") REFERENCES "orders"("id") ON DELETE CASCADE;
+ALTER TABLE "order_products" ADD CONSTRAINT "order_products_fk1" FOREIGN KEY ("product_id") REFERENCES "products"("id") ON DELETE CASCADE;

@@ -9,7 +9,6 @@
 <head>
     <meta charset="UTF-8">
     <title><fmt:message key="registration"/></title>
-    <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
           crossorigin="anonymous">
@@ -63,7 +62,7 @@
             <div class="form-group col-12">
                 <label for="role"><fmt:message key="position"/></label>
                 <select name="role" id="role" class="form-control">
-                    <c:forEach var="position" items="#{requestScope.positions}">
+                    <c:forEach var="position" items="${requestScope.positions}">
                         <option value="${position.name()}">
                             <fmt:message key="${position.name()}"/>
                         </option>

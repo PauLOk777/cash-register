@@ -7,14 +7,15 @@
 <fmt:setBundle basename="messages"/>
 <html lang="${sessionScope.lang}">
 <head>
-    <title><fmt:message key="login"/></title>
+    <meta charset="UTF-8">
+    <title><fmt:message key="report"/></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
           crossorigin="anonymous">
-
     <style>
         <%@include file="/css/style.css"%>
     </style>
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
             integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
             crossorigin="anonymous"></script>
@@ -24,35 +25,26 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
             integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
             crossorigin="anonymous"></script>
+
 </head>
 <body class="d-flex flex-column min-vh-100">
-<%@include file="partials/guestHeader.jspf" %>
-<div class="authorization-form">
-    <form action="/login" method="post">
-        <div class="form-group">
-            <label for="username"><fmt:message key="username"/></label>
-            <input type="text" class="form-control" id="username" name="username">
-        </div>
-        <div class="form-group">
-            <label for="password"><fmt:message key="password"/></label>
-            <input type="password" class="form-control" id="password" name="password">
-        </div>
-        <div class="text-center content-red">
-            <c:if test='${param["usr_err"] != null}'>
-                <fmt:message key="exception.wrong.username"/>
-            </c:if>
-            <c:if test='${param["pass_err"] != null}'>
-                <fmt:message key="exception.wrong.password"/>
-            </c:if>
-            <c:if test='${param["log_twice_err"] != null}'>
-                <fmt:message key="exception.log.twice"/>
-            </c:if>
-        </div>
-        <div class="btn-wrapper">
-            <button type="submit" class="btn btn-primary"><fmt:message key="login"/></button>
-        </div>
-    </form>
+<%@include file="../../partials/seniorCashierHeader.jspf" %>
+<div class="content-form">
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col"><fmt:message key="${requestScope.amountOfOrders}"/></th>
+            <th scope="col"><fmt:message key="${requestScope.totalPrice}"/></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td><fmt:message key="${requestScope.report.amount}"/></td>
+            <td class="priceToParse"><fmt:message key="${requestScope.report.totalPrice}"/></td>
+        </tr>
+        </tbody>
+    </table>
 </div>
-<%@include file="partials/footer.jspf" %>
+<%@include file="../../partials/footer.jspf" %>
 </body>
 </html>

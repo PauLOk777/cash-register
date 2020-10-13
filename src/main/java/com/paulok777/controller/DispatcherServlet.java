@@ -37,15 +37,15 @@ public class DispatcherServlet extends HttpServlet {
     }
 
     private void putGetCommands(ServiceFactory serviceFactory) {
-        getCommands.put("index", new IndexCommand());
+        getCommands.put("", new IndexCommand());
         getCommands.put("logout", new LogOutCommand());
         getCommands.put("login", new GetLoginPageCommand());
         getCommands.put("registration", new GetRegistrationPageCommand());
         getCommands.put("commodity_expert/products", new GetProductsCommand());
-        getCommands.put("cashier/orders", new GetOrdersCashierCommand());
+        getCommands.put("cashier/orders", new GetOrdersCashierCommand(serviceFactory.createOrderService()));
         getCommands.put("cashier/orders/\\d+", new GetOrderByIdCashierCommand());
-        getCommands.put("senior_cashier/orders", new GetOrdersSeniorCashierCommand());
-        getCommands.put("senior_cashier/orders/\\d+", new GetOrderByIdSeniorCashierCommand());
+        getCommands.put("senior_cashier/orders", new GetOrdersSeniorCashierCommand(serviceFactory.createOrderService()));
+        getCommands.put("senior_cashier/orders/\\d+", new GetOrderByIdSeniorCashierCommand(serviceFactory.createOrderService()));
         getCommands.put("senior_cashier/reports/x", new MakeXReportCommand());
         getCommands.put("senior_cashier/reports/z", new MakeZReportCommand());
     }
@@ -59,7 +59,7 @@ public class DispatcherServlet extends HttpServlet {
         postCommands.put("cashier/orders/\\d+", new AddProductCashierCommand());
         postCommands.put("cashier/orders/\\d+/\\d+", new ChangeAmountOfProductCashierCommand());
         postCommands.put("cashier/orders/close/\\d+", new CloseOrderCashierCommand());
-        postCommands.put("senior_cashier/orders", new CreateNewOrderSeniorCashierCommand());
+        postCommands.put("senior_cashier/orders", new CreateNewOrderSeniorCashierCommand(serviceFactory.createOrderService()));
         postCommands.put("senior_cashier/orders/\\d+", new AddProductSeniorCashierCommand());
         postCommands.put("senior_cashier/orders/\\d+/\\d+", new ChangeAmountOfProductSeniorCashierCommand());
         postCommands.put("senior_cashier/orders/close/\\d+", new CloseOrderSeniorCashierCommand());
