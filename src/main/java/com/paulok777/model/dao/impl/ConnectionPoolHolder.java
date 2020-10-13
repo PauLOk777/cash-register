@@ -25,7 +25,7 @@ public class ConnectionPoolHolder {
                         ds.setMaxIdle(Integer.parseInt(p.getProperty("db.max.idle")));
                         ds.setMaxOpenPreparedStatements(Integer.parseInt(
                                 p.getProperty("db.max.open.prepared.statement")));
-                        ds.setDriverClassName("org.postgresql.Driver");
+                        ds.setDriverClassName(p.getProperty("db.driver.class.name"));
                         dataSource = ds;
                     } catch (Exception e) {
                         e.printStackTrace();
