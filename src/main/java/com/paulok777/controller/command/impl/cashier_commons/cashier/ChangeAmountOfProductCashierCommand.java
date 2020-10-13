@@ -1,10 +1,10 @@
-package com.paulok777.controller.command.impl.senior_cashier;
+package com.paulok777.controller.command.impl.cashier_commons.cashier;
 
 import com.paulok777.controller.command.Command;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class ChangeAmountOfProductSeniorCashierCommand implements Command {
+public class ChangeAmountOfProductCashierCommand implements Command {
     @Override
     public String execute(HttpServletRequest request) {
         return null;

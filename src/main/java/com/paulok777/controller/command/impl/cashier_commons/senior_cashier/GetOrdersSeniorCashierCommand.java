@@ -1,6 +1,7 @@
-package com.paulok777.controller.command.impl.senior_cashier;
+package com.paulok777.controller.command.impl.cashier_commons.senior_cashier;
 
 import com.paulok777.controller.command.Command;
+import com.paulok777.controller.command.impl.cashier_commons.CashierCommonFunctionality;
 import com.paulok777.model.entity.Order;
 import com.paulok777.model.service.OrderService;
 
@@ -16,8 +17,7 @@ public class GetOrdersSeniorCashierCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
-        List<Order> orders = orderService.getOrders();
-        request.setAttribute("orders", orders);
+        CashierCommonFunctionality.getOrders(orderService, request);
         return "/WEB-INF/senior_cashier/ordersSeniorCashier.jsp";
     }
 }

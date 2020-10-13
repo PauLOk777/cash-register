@@ -1,4 +1,4 @@
-package com.paulok777.controller.command.impl.senior_cashier;
+package com.paulok777.controller.command.impl.cashier_commons.senior_cashier;
 
 import com.paulok777.controller.command.Command;
 

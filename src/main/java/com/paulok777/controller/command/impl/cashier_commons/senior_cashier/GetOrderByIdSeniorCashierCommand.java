@@ -1,6 +1,7 @@
-package com.paulok777.controller.command.impl.senior_cashier;
+package com.paulok777.controller.command.impl.cashier_commons.senior_cashier;
 
 import com.paulok777.controller.command.Command;
+import com.paulok777.controller.command.impl.cashier_commons.CashierCommonFunctionality;
 import com.paulok777.model.entity.Product;
 import com.paulok777.model.service.OrderService;
 
@@ -17,12 +18,7 @@ public class GetOrderByIdSeniorCashierCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        String[] subUris = request.getRequestURI().split("/");
-        String id = subUris[subUris.length - 1];
-        Map<Long, Product> products = orderService.getProductsByOrderId(id);
-        session.setAttribute("orderId", id);
-        session.setAttribute("products", products);
+        CashierCommonFunctionality.getOrderById(orderService, request);
         return "/WEB-INF/senior_cashier/orderProductsSeniorCashier.jsp";
     }
 }

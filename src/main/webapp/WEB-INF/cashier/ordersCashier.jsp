@@ -28,17 +28,11 @@
 
 </head>
 <body class="d-flex flex-column min-vh-100">
-<%@include file="../../partials/seniorCashierHeader.jspf" %>
+<%@include file="../../partials/cashierHeader.jspf" %>
 <div class="content-form">
     <div class="flex-sa mb-5">
-        <form action="/senior_cashier/reports/x" method="get">
-            <button type="submit" class="btn btn-secondary btn-lg"><fmt:message key="report.x"/></button>
-        </form>
-        <form action="/senior_cashier/orders" method="post">
+        <form action="/cashier/orders" method="post">
             <button type="submit" class="btn btn-primary btn-lg"><fmt:message key="newOrder"/></button>
-        </form>
-        <form action="/senior_cashier/reports/z" method="get">
-            <button type="submit" class="btn btn-secondary btn-lg"><fmt:message key="report.z"/></button>
         </form>
     </div>
     <table class="table">
@@ -47,7 +41,6 @@
             <th scope="col">#</th>
             <th scope="col"><fmt:message key="creationDate"/></th>
             <th scope="col"><fmt:message key="totalPrice"/></th>
-            <th scope="col"><fmt:message key="cancelOrder"/></th>
             <th scope="col"><fmt:message key="closeOrder"/></th>
         </tr>
         </thead>
@@ -55,19 +48,12 @@
         <c:forEach var="order" items="${requestScope.orders}">
             <tr>
                 <th scope="row">
-                    <a href="/senior_cashier/orders/<c:out value="${order.id}"/>"><c:out value="${order.id}"/></a>
+                    <a href="/cashier/orders/<c:out value="${order.id}"/>"><c:out value="${order.id}"/></a>
                 </th>
                 <td><c:out value="${order.createDate}"/></td>
                 <td class="priceToParse"><c:out value="${order.totalPrice}"/></td>
                 <td>
-                    <form action="/senior_cashier/orders/cancel/<c:out value="${order.id}"/>" method="post">
-                        <button type="submit" class="btn btn-outline-danger btn-sm">
-                            <fmt:message key="cancel"/>
-                        </button>
-                    </form>
-                </td>
-                <td>
-                    <form action="/senior_cashier/orders/close/<c:out value="${order.id}"/>" method="post">
+                    <form action="/cashier/orders/close/<c:out value="${order.id}"/>" method="post">
                         <button type="submit" class="btn btn-outline-success btn-sm">
                             <fmt:message key="close"/>
                         </button>

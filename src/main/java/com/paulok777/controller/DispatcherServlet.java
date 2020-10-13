@@ -2,12 +2,12 @@ package com.paulok777.controller;
 
 import com.paulok777.controller.command.Command;
 import com.paulok777.controller.command.impl.*;
-import com.paulok777.controller.command.impl.cashier.*;
+import com.paulok777.controller.command.impl.cashier_commons.cashier.*;
 import com.paulok777.controller.command.impl.commodity_expert.ChangeAmountOfProductCommand;
 import com.paulok777.controller.command.impl.commodity_expert.CreateProductCommand;
 import com.paulok777.controller.command.impl.commodity_expert.GetProductsCommand;
 import com.paulok777.controller.command.impl.guest.*;
-import com.paulok777.controller.command.impl.senior_cashier.*;
+import com.paulok777.controller.command.impl.cashier_commons.senior_cashier.*;
 import com.paulok777.model.service.ServiceFactory;
 
 import javax.servlet.ServletConfig;
@@ -43,7 +43,7 @@ public class DispatcherServlet extends HttpServlet {
         getCommands.put("registration", new GetRegistrationPageCommand());
         getCommands.put("commodity_expert/products", new GetProductsCommand());
         getCommands.put("cashier/orders", new GetOrdersCashierCommand(serviceFactory.createOrderService()));
-        getCommands.put("cashier/orders/\\d+", new GetOrderByIdCashierCommand());
+        getCommands.put("cashier/orders/\\d+", new GetOrderByIdCashierCommand(serviceFactory.createOrderService()));
         getCommands.put("senior_cashier/orders", new GetOrdersSeniorCashierCommand(serviceFactory.createOrderService()));
         getCommands.put("senior_cashier/orders/\\d+", new GetOrderByIdSeniorCashierCommand(serviceFactory.createOrderService()));
         getCommands.put("senior_cashier/reports/x", new MakeXReportCommand(serviceFactory.createOrderService()));
@@ -55,10 +55,10 @@ public class DispatcherServlet extends HttpServlet {
         postCommands.put("registration", new RegistrationCommand(serviceFactory.createUserService()));
         postCommands.put("commodity_expert/products", new CreateProductCommand());
         postCommands.put("commodity_expert/products/\\d+", new ChangeAmountOfProductCommand());
-        postCommands.put("cashier/orders", new CreateNewOrderCashierCommand());
+        postCommands.put("cashier/orders", new CreateNewOrderCashierCommand(serviceFactory.createOrderService()));
         postCommands.put("cashier/orders/\\d+", new AddProductCashierCommand());
         postCommands.put("cashier/orders/\\d+/\\d+", new ChangeAmountOfProductCashierCommand());
-        postCommands.put("cashier/orders/close/\\d+", new CloseOrderCashierCommand());
+        postCommands.put("cashier/orders/close/\\d+", new CloseOrderCashierCommand(serviceFactory.createOrderService()));
         postCommands.put("senior_cashier/orders", new CreateNewOrderSeniorCashierCommand(serviceFactory.createOrderService()));
         postCommands.put("senior_cashier/orders/\\d+", new AddProductSeniorCashierCommand());
         postCommands.put("senior_cashier/orders/\\d+/\\d+", new ChangeAmountOfProductSeniorCashierCommand());

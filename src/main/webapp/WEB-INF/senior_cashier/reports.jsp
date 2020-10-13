@@ -39,8 +39,8 @@
         </thead>
         <tbody>
         <tr>
-            <td>${requestScope.report.amount}</td>
-            <td class="priceToParse">${requestScope.report.totalPrice}</td>
+            <td><c:out value="${requestScope.report.amount}"/></td>
+            <td class="priceToParse"><c:out value="${requestScope.report.totalPrice}"/></td>
         </tr>
         </tbody>
     </table>
