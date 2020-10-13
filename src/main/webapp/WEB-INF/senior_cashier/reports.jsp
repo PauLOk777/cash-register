@@ -33,14 +33,14 @@
     <table class="table">
         <thead class="thead-light">
         <tr>
-            <th scope="col"><fmt:message key="${requestScope.amountOfOrders}"/></th>
-            <th scope="col"><fmt:message key="${requestScope.totalPrice}"/></th>
+            <th scope="col"><fmt:message key="amountOfOrders"/></th>
+            <th scope="col"><fmt:message key="totalPrice"/></th>
         </tr>
         </thead>
         <tbody>
         <tr>
-            <td><fmt:message key="${requestScope.report.amount}"/></td>
-            <td class="priceToParse"><fmt:message key="${requestScope.report.totalPrice}"/></td>
+            <td>${requestScope.report.amount}</td>
+            <td class="priceToParse">${requestScope.report.totalPrice}</td>
         </tr>
         </tbody>
     </table>

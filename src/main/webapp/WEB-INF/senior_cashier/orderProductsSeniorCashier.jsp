@@ -28,10 +28,10 @@
 
 </head>
 <body class="d-flex flex-column min-vh-100">
-
+<%@include file="../../partials/seniorCashierHeader.jspf" %>
 <div class="content-form">
     <div class="mb-5">
-        <form action="/senior_cashier/orders/<c:out value="${requestScope.orderId}"/>" method="post">
+        <form action="/senior_cashier/orders/<c:out value="${orderId}"/>" method="post">
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="productIdentifier"><fmt:message key="codeOrNameOfProduct"/></label>
@@ -69,7 +69,7 @@
                     <td><fmt:message key="${product.value.measure.name()}"/></td>
                     <td>product.key</td>
                     <td>
-                        <form action="/senior_cashier/orders/<c:out value="${requestScope.orderId + '/' + product.value.id}"/>"
+                        <form action="/senior_cashier/orders/<c:out value="${orderId + '/' + product.value.id}"/>"
                               method="post" class="form-inline">
                             <div class="form-group mx-sm-1 input-group-sm">
                                 <input type="number" name="amount" class="form-control"/>
@@ -78,7 +78,7 @@
                         </form>
                     </td>
                     <td>
-                        <form action="/senior_cashier/orders/cancel/<c:out value="${requestScope.orderId + '/' + product.value.id}"/>"
+                        <form action="/senior_cashier/orders/cancel/<c:out value="${orderId + '/' + product.value.id}"/>"
                               method="post">
                             <button type="submit" class="btn btn-outline-danger btn-sm"><fmt:message key="cancel"/></button>
                         </form>
@@ -89,14 +89,14 @@
         </table>
     </div>
     <div class="flex-sa mb-5">
-        <form action="/senior_cashier/orders/cancel/<c:out value="${requestScope.orderId}"/>" method="post">
+        <form action="/senior_cashier/orders/cancel/<c:out value="${orderId}"/>" method="post">
             <button type="submit" class="btn btn-outline-danger btn-lg"><fmt:message key="cancelOrder"/></button>
         </form>
-        <form action="/senior_cashier/orders/close/<c:out value="${requestScope.orderId}"/>" method="post">
+        <form action="/senior_cashier/orders/close/<c:out value="${orderId}"/>" method="post">
             <button type="submit" class="btn btn-outline-success btn-lg"><fmt:message key="closeOrder"/></button>
         </form>
     </div>
 </div>
-
+<%@include file="../../partials/footer.jspf" %>
 </body>
 </html>

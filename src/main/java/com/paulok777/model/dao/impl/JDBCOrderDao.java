@@ -136,6 +136,8 @@ public class JDBCOrderDao implements OrderDao {
             statement.setTimestamp(1, Timestamp.valueOf(entity.getCreateDate()));
             statement.setString(2, entity.getStatus().name());
             statement.setLong(3, entity.getTotalPrice());
+            statement.setLong(4, entity.getId());
+            statement.execute();
         } catch (SQLException e) {
             throw new RuntimeException();
         }

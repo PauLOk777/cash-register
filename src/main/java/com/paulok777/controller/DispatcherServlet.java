@@ -46,8 +46,8 @@ public class DispatcherServlet extends HttpServlet {
         getCommands.put("cashier/orders/\\d+", new GetOrderByIdCashierCommand());
         getCommands.put("senior_cashier/orders", new GetOrdersSeniorCashierCommand(serviceFactory.createOrderService()));
         getCommands.put("senior_cashier/orders/\\d+", new GetOrderByIdSeniorCashierCommand(serviceFactory.createOrderService()));
-        getCommands.put("senior_cashier/reports/x", new MakeXReportCommand());
-        getCommands.put("senior_cashier/reports/z", new MakeZReportCommand());
+        getCommands.put("senior_cashier/reports/x", new MakeXReportCommand(serviceFactory.createOrderService()));
+        getCommands.put("senior_cashier/reports/z", new MakeZReportCommand(serviceFactory.createOrderService()));
     }
 
     private void putPostCommands(ServiceFactory serviceFactory) {
@@ -62,8 +62,8 @@ public class DispatcherServlet extends HttpServlet {
         postCommands.put("senior_cashier/orders", new CreateNewOrderSeniorCashierCommand(serviceFactory.createOrderService()));
         postCommands.put("senior_cashier/orders/\\d+", new AddProductSeniorCashierCommand());
         postCommands.put("senior_cashier/orders/\\d+/\\d+", new ChangeAmountOfProductSeniorCashierCommand());
-        postCommands.put("senior_cashier/orders/close/\\d+", new CloseOrderSeniorCashierCommand());
-        postCommands.put("senior_cashier/orders/cancel/\\d+", new CancelOrderCommand());
+        postCommands.put("senior_cashier/orders/close/\\d+", new CloseOrderSeniorCashierCommand(serviceFactory.createOrderService()));
+        postCommands.put("senior_cashier/orders/cancel/\\d+", new CancelOrderCommand(serviceFactory.createOrderService()));
         postCommands.put("senior_cashier/orders/cancel/\\d+/\\d+", new CancelProductInOrderCommand());
     }
 
