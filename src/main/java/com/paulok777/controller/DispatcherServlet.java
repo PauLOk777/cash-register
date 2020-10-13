@@ -3,7 +3,9 @@ package com.paulok777.controller;
 import com.paulok777.controller.command.Command;
 import com.paulok777.controller.command.impl.*;
 import com.paulok777.controller.command.impl.cashier.*;
-import com.paulok777.controller.command.impl.commodity_expert.*;
+import com.paulok777.controller.command.impl.commodity_expert.ChangeAmountOfProductCommand;
+import com.paulok777.controller.command.impl.commodity_expert.CreateProductCommand;
+import com.paulok777.controller.command.impl.commodity_expert.GetProductsCommand;
 import com.paulok777.controller.command.impl.senior_cashier.*;
 import com.paulok777.model.service.ServiceFactory;
 
@@ -21,6 +23,7 @@ public class DispatcherServlet extends HttpServlet {
     private final Map<String, Command> getCommands = new ConcurrentHashMap<>();
     private final Map<String, Command> postCommands = new ConcurrentHashMap<>();
     private static final String REDIRECT = "redirect:";
+    private static final String COMMAND_NOT_FOUND = "COMMAND NOT FOUND";
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -82,7 +85,12 @@ public class DispatcherServlet extends HttpServlet {
                 .stream()
                 .filter(path::matches)
                 .findFirst()
-                .orElse("index");
+                .orElse(COMMAND_NOT_FOUND);
+
+        if (key.equals(COMMAND_NOT_FOUND)) {
+            resp.sendError(403);
+            return;
+        }
         Command command = commands.get(key);
         String result = command.execute(req);
         if (result.contains(REDIRECT)) {

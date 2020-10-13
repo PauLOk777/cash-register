@@ -1,13 +1,21 @@
-<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ page isELIgnored="false" %>
+
+<fmt:setLocale value="${sessionScope.lang}"/>
+<fmt:setBundle basename="messages"/>
+<html lang="${sessionScope.lang}">
 <head>
-    <title>Login</title>
+    <title><fmt:message key="login"/></title>
     <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
           crossorigin="anonymous">
 
+    <style>
+        <%@include file="/css/style.css"%>
+    </style>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
             integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
             crossorigin="anonymous"></script>
@@ -19,23 +27,27 @@
             crossorigin="anonymous"></script>
 </head>
 <body class="d-flex flex-column min-vh-100">
-    <div th:replace="partials/guestHeader :: nav"></div>
-    <div class="authorization-form">
-        <form action="/login" method="post">
-            <div class="form-group">
-                <label th:text="#{username}" for="username">Email address</label>
-                <input type="text" class="form-control" id="username" name="username">
-            </div>
-            <div class="form-group">
-                <label th:text="#{password}" for="password"></label>
-                <input type="password" class="form-control" id="password" name="password">
-            </div>
-            <div class="text-center content-red" th:if="${(param.error != null)}" th:text="#{incorrectLogin}"></div>
-            <div class="btn-wrapper">
-                <button type="submit" class="btn btn-primary">[[#{login}]]</button>
-            </div>
-        </form>
-    </div>
-    <div th:replace="partials/footer :: footer"></div>
+<%@include file="partials/guestHeader.jspf" %>
+<div class="authorization-form">
+    <form action="/login" method="post">
+        <div class="form-group">
+            <label for="username"><fmt:message key="username"/></label>
+            <input type="text" class="form-control" id="username" name="username">
+        </div>
+        <div class="form-group">
+            <label for="password"><fmt:message key="password"/></label>
+            <input type="password" class="form-control" id="password" name="password">
+        </div>
+        <div class="text-center content-red">
+            <c:if test="${(param.error != null)}">
+                <fmt:message key="incorrectLogin"/>
+            </c:if>
+        </div>
+        <div class="btn-wrapper">
+            <button type="submit" class="btn btn-primary"><fmt:message key="login"/></button>
+        </div>
+    </form>
+</div>
+<%@include file="partials/footer.jspf" %>
 </body>
 </html>

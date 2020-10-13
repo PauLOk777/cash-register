@@ -7,7 +7,7 @@ import java.io.FileReader;
 import java.util.Properties;
 
 public class ConnectionPoolHolder {
-    private static final String DB_PROPERTIES = "src/main/resources/db.properties";
+    private static final String DB_PROPERTIES = "C://projects/cash-register/src/main/resources/db.properties";
     private static volatile DataSource dataSource;
 
     public static DataSource getDataSource() {
@@ -25,8 +25,10 @@ public class ConnectionPoolHolder {
                         ds.setMaxIdle(Integer.parseInt(p.getProperty("db.max.idle")));
                         ds.setMaxOpenPreparedStatements(Integer.parseInt(
                                 p.getProperty("db.max.open.prepared.statement")));
+                        ds.setDriverClassName("org.postgresql.Driver");
                         dataSource = ds;
                     } catch (Exception e) {
+                        e.printStackTrace();
                         System.exit(-1);
                     }
                 }

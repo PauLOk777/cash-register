@@ -35,14 +35,15 @@ public class JDBCUserDao implements UserDao {
 
     @Override
     public void create(User entity) {
-        try (PreparedStatement ps = connection.prepareStatement(UserQueries.CREATE)) {
-            ps.setString(1, entity.getFirstName());
-            ps.setString(2, entity.getLastName());
-            ps.setString(3, entity.getUsername());
-            ps.setString(4, entity.getPassword());
-            ps.setString(5, entity.getPhoneNumber());
-            ps.setString(6, entity.getEmail());
-            ps.setString(7, entity.getRole().getAuthority());
+        try (PreparedStatement statement = connection.prepareStatement(UserQueries.CREATE)) {
+            statement.setString(1, entity.getFirstName());
+            statement.setString(2, entity.getLastName());
+            statement.setString(3, entity.getUsername());
+            statement.setString(4, entity.getPassword());
+            statement.setString(5, entity.getPhoneNumber());
+            statement.setString(6, entity.getEmail());
+            statement.setString(7, entity.getRole().getAuthority());
+            statement.execute();
         } catch (SQLException e) {
             throw new RuntimeException();
         }

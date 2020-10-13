@@ -21,6 +21,7 @@ public class UserService {
             userDao.create(user);
         } catch (Exception e) {
 //            log.warn("{}.", ExceptionKeys.DUPLICATE_USERNAME);
+            e.printStackTrace();
             throw new DuplicateUsernameException(ExceptionKeys.DUPLICATE_USERNAME);
         }
     }

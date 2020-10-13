@@ -9,9 +9,9 @@ CREATE TABLE "users" (
 	"role" VARCHAR(50)
 );
 
-CREATE TABLE "order" (
+CREATE TABLE "orders" (
 	"id" SERIAL PRIMARY KEY,
-	"user_id" INTEGER NOT NULL DEFAULT -1,
+	"user_id" INTEGER NOT NULL,
 	"total_price" INTEGER NOT NULL,
 	"status" VARCHAR(30) NOT NULL,
 	"create_date" TIMESTAMP NOT NULL
@@ -32,9 +32,7 @@ CREATE TABLE "products" (
 	"measure" VARCHAR(20) NOT NULL
 );
 
-ALTER TABLE "users" ADD CONSTRAINT "users_fk0" FOREIGN KEY ("role_id") REFERENCES "roles"("id") ON DELETE SET DEFAULT;
-
 ALTER TABLE "order" ADD CONSTRAINT "order_fk0" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE SET NULL;
 
-ALTER TABLE "order_products" ADD CONSTRAINT "order_products_fk0" FOREIGN KEY ("order_id") REFERENCES "order"("id") ON DELETE CASCADE;
+ALTER TABLE "order_products" ADD CONSTRAINT "order_products_fk2" FOREIGN KEY ("order_id") REFERENCES "orders"("id") ON DELETE CASCADE;
 ALTER TABLE "order_products" ADD CONSTRAINT "order_products_fk1" FOREIGN KEY ("product_id") REFERENCES "products"("code") ON DELETE CASCADE;

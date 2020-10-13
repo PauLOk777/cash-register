@@ -7,7 +7,7 @@
 <fmt:setBundle basename="messages"/>
 <html lang="${sessionScope.lang}">
 <head>
-    <title>Main</title>
+    <title><fmt:message key="main"/></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <style>
         <%@include file="/css/style.css"%>

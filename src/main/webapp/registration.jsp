@@ -1,6 +1,11 @@
-<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ page isELIgnored="false" %>
+
+<fmt:setLocale value="${sessionScope.lang}"/>
+<fmt:setBundle basename="messages"/>
+<html lang="${sessionScope.lang}">
 <head>
     <meta charset="UTF-8">
     <title><fmt:message key="registration"/></title>
@@ -9,6 +14,9 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
           crossorigin="anonymous">
 
+    <style>
+        <%@include file="/css/style.css"%>
+    </style>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
             integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
             crossorigin="anonymous"></script>
@@ -20,52 +28,54 @@
             crossorigin="anonymous"></script>
 </head>
 <body class="d-flex flex-column min-vh-100">
-    <div th:replace="partials/guestHeader :: nav"></div>
-    <div class="authorization-form">
-        <form action="/registration" method="post">
-            <div class="form-row">
-                <div class="form-group col-12">
-                    <label th:text="#{firstName}" for="firstName"></label>
-                    <input type="text" name="firstName" id="firstName" class="form-control"/>
-                </div>
-                <div class="form-group col-12">
-                    <label th:text="#{lastName}" for="lastName"></label>
-                    <input type="text" name="lastName" id="lastName" class="form-control"/>
-                </div>
+<%@include file="partials/guestHeader.jspf" %>
+<div class="authorization-form">
+    <form action="/registration" method="post">
+        <div class="form-row">
+            <div class="form-group col-12">
+                <label for="firstName"><fmt:message key="firstName"/></label>
+                <input type="text" name="firstName" id="firstName" class="form-control"/>
             </div>
-            <div class="form-group">
-                <label th:text="#{email}" for="email"></label>
-                <input type="email" name="email" id="email"class="form-control"/>
+            <div class="form-group col-12">
+                <label for="lastName"><fmt:message key="lastName"/></label>
+                <input type="text" name="lastName" id="lastName" class="form-control"/>
             </div>
-            <div class="form-row">
-                <div class="form-group col-12">
-                    <label th:text="#{username}" for="username"></label>
-                    <input type="text" name="username" id="username" class="form-control"/>
-                </div>
-                <div class="form-group col-12">
-                    <label th:text="#{password}" for="password"></label>
-                    <input type="password" name="password" id="password" class="form-control"/>
-                </div>
+        </div>
+        <div class="form-group">
+            <label for="email"><fmt:message key="email"/></label>
+            <input type="email" name="email" id="email" class="form-control"/>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-12">
+                <label for="username"><fmt:message key="username"/></label>
+                <input type="text" name="username" id="username" class="form-control"/>
             </div>
-            <div class="form-row">
-                <div class="form-group col-12">
-                    <label th:text="#{phoneNumber}" for="phoneNumber"></label>
-                    <input type="tel" name="phoneNumber" id="phoneNumber" class="form-control"/>
-                </div>
-                <div class="form-group col-12">
-                    <label for="role" th:text="#{position}"></label>
-                    <select name="role" id="role" class="form-control">
-                        <option th:each="position: ${positions}" th:value="${position.name()}">
-                            [[#{${position.name()}}]]
+            <div class="form-group col-12">
+                <label for="password"><fmt:message key="password"/></label>
+                <input type="password" name="password" id="password" class="form-control"/>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-12">
+                <label for="phoneNumber"><fmt:message key="phoneNumber"/></label>
+                <input type="tel" name="phoneNumber" id="phoneNumber" class="form-control"/>
+            </div>
+            <div class="form-group col-12">
+                <label for="role"><fmt:message key="position"/></label>
+                <select name="role" id="role" class="form-control">
+                    <c:forEach var="position" items="#{requestScope.positions}">
+                        <option value="${position.name()}">
+                            <fmt:message key="${position.name()}"/>
                         </option>
-                    </select>
-                </div>
+                    </c:forEach>
+                </select>
             </div>
-            <div class="btn-wrapper">
-                <button type="submit" class="btn btn-primary">[[#{registration}]]</button>
-            </div>
-        </form>
-    </div>
-    <div th:replace="partials/footer :: footer"></div>
+        </div>
+        <div class="btn-wrapper">
+            <button type="submit" class="btn btn-primary"><fmt:message key="registration"/></button>
+        </div>
+    </form>
+</div>
+<%@include file="partials/footer.jspf" %>
 </body>
 </html>
