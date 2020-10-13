@@ -4,6 +4,8 @@ import com.paulok777.model.dao.DaoFactory;
 import com.paulok777.model.dao.UserDao;
 import com.paulok777.model.dto.UserDTO;
 import com.paulok777.model.entity.User;
+import com.paulok777.model.exception.cash_register_exc.login_exc.WrongPasswordException;
+import com.paulok777.model.exception.cash_register_exc.login_exc.WrongUsernameException;
 import com.paulok777.model.exception.cash_register_exc.registration_exc.DuplicateUsernameException;
 import com.paulok777.model.util.ExceptionKeys;
 
@@ -32,6 +34,17 @@ public class UserService {
 //                    SecurityContextHolder.getContext().getAuthentication().getName()
                     "Hello"
             ).orElseThrow(RuntimeException::new);
+        }
+    }
+
+    public User.Role checkUserAndGetRole(String username, String password) {
+        try (UserDao userDao = daoFactory.createUserDao()) {
+            User user = userDao.findByUsername(username)
+                    .orElseThrow(() -> new WrongUsernameException(ExceptionKeys.WRONG_USERNAME));
+            if (!user.getPassword().equals(password)) {
+                throw new WrongPasswordException(ExceptionKeys.WRONG_PASSWORD);
+            }
+            return user.getRole();
         }
     }
 }

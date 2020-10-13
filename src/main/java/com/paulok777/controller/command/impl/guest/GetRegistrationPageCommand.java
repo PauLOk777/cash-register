@@ -1,4 +1,4 @@
-package com.paulok777.controller.command.impl;
+package com.paulok777.controller.command.impl.guest;
 
 import com.paulok777.controller.command.Command;
 import com.paulok777.model.entity.User;

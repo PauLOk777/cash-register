@@ -1,6 +1,9 @@
 package com.paulok777.model.util;
 
 public class ExceptionKeys {
+    public static final String WRONG_USERNAME = "exception.wrong.username";
+    public static final String WRONG_PASSWORD = "exception.wrong.password";
+    public static final String TRYING_LOGIN_TWICE = "exception.log.twice";
     public static final String INVALID_ID_EXCEPTION = "exception.invalid.id";
     public static final String DUPLICATE_USERNAME = "exception.duplicate.username";
     public static final String DUPLICATE_CODE_OR_NAME = "exception.duplicate.code.or.name";

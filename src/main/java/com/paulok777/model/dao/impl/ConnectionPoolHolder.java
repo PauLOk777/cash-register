@@ -28,7 +28,6 @@ public class ConnectionPoolHolder {
                         ds.setDriverClassName(p.getProperty("db.driver.class.name"));
                         dataSource = ds;
                     } catch (Exception e) {
-                        e.printStackTrace();
                         System.exit(-1);
                     }
                 }

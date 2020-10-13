@@ -6,6 +6,7 @@ import com.paulok777.controller.command.impl.cashier.*;
 import com.paulok777.controller.command.impl.commodity_expert.ChangeAmountOfProductCommand;
 import com.paulok777.controller.command.impl.commodity_expert.CreateProductCommand;
 import com.paulok777.controller.command.impl.commodity_expert.GetProductsCommand;
+import com.paulok777.controller.command.impl.guest.*;
 import com.paulok777.controller.command.impl.senior_cashier.*;
 import com.paulok777.model.service.ServiceFactory;
 
@@ -88,7 +89,7 @@ public class DispatcherServlet extends HttpServlet {
                 .orElse(COMMAND_NOT_FOUND);
 
         if (key.equals(COMMAND_NOT_FOUND)) {
-            resp.sendError(403);
+            resp.sendError(404);
             return;
         }
         Command command = commands.get(key);
