@@ -19,7 +19,7 @@ public class ChangeAmountOfProductSeniorCashierCommand implements Command {
         String orderId = subUris[subUris.length - 2];
         String productId = subUris[subUris.length - 1];
         CashierCommonFunctionality.changeAmountOfProduct(orderService, orderId, productId,
-                Long.valueOf(request.getParameter("amount")));
+                Long.parseLong(request.getParameter("amount")));
         return "redirect:/senior_cashier/orders/" + orderId;
     }
 }

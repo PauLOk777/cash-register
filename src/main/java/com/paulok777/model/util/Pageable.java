@@ -2,11 +2,11 @@ package com.paulok777.model.util;
 
 public class Pageable {
     private int currentPage;
-    private int numberOfPages;
+    private int sizeOfPage;
 
-    public Pageable(int currentPage, int numberOfPages) {
+    public Pageable(int currentPage, int sizeOfPage) {
         this.currentPage = currentPage;
-        this.numberOfPages = numberOfPages;
+        this.sizeOfPage = sizeOfPage;
     }
 
     public int getCurrentPage() {
@@ -17,11 +17,11 @@ public class Pageable {
         this.currentPage = currentPage;
     }
 
-    public int getNumberOfPages() {
-        return numberOfPages;
+    public int getSizeOfPage() {
+        return sizeOfPage;
     }
 
-    public void setNumberOfPages(int numberOfPages) {
-        this.numberOfPages = numberOfPages;
+    public void setSizeOfPage(int sizeOfPage) {
+        this.sizeOfPage = sizeOfPage;
     }
 }

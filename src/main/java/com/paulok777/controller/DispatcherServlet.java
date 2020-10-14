@@ -8,6 +8,7 @@ import com.paulok777.controller.command.impl.commodity_expert.CreateProductComma
 import com.paulok777.controller.command.impl.commodity_expert.GetProductsCommand;
 import com.paulok777.controller.command.impl.guest.*;
 import com.paulok777.controller.command.impl.cashier_commons.senior_cashier.*;
+import com.paulok777.model.exception.CashRegisterException;
 import com.paulok777.model.service.ServiceFactory;
 
 import javax.servlet.ServletConfig;
@@ -41,7 +42,7 @@ public class DispatcherServlet extends HttpServlet {
         getCommands.put("logout", new LogOutCommand());
         getCommands.put("login", new GetLoginPageCommand());
         getCommands.put("registration", new GetRegistrationPageCommand());
-        getCommands.put("commodity_expert/products", new GetProductsCommand());
+        getCommands.put("commodity_expert/products", new GetProductsCommand(serviceFactory.createProductService()));
         getCommands.put("cashier/orders", new GetOrdersCashierCommand(serviceFactory.createOrderService()));
         getCommands.put("cashier/orders/\\d+", new GetOrderByIdCashierCommand(serviceFactory.createOrderService()));
         getCommands.put("senior_cashier/orders", new GetOrdersSeniorCashierCommand(serviceFactory.createOrderService()));
@@ -53,8 +54,8 @@ public class DispatcherServlet extends HttpServlet {
     private void putPostCommands(ServiceFactory serviceFactory) {
         postCommands.put("login", new LogInCommand(serviceFactory.createUserService()));
         postCommands.put("registration", new RegistrationCommand(serviceFactory.createUserService()));
-        postCommands.put("commodity_expert/products", new CreateProductCommand());
-        postCommands.put("commodity_expert/products/\\d+", new ChangeAmountOfProductCommand());
+        postCommands.put("commodity_expert/products", new CreateProductCommand(serviceFactory.createProductService()));
+        postCommands.put("commodity_expert/products/\\d+", new ChangeAmountOfProductCommand(serviceFactory.createProductService()));
         postCommands.put("cashier/orders", new CreateNewOrderCashierCommand(serviceFactory.createOrderService()));
         postCommands.put("cashier/orders/\\d+", new AddProductCashierCommand(serviceFactory.createOrderService()));
         postCommands.put("cashier/orders/\\d+/\\d+", new ChangeAmountOfProductCashierCommand(serviceFactory.createOrderService()));
@@ -92,8 +93,19 @@ public class DispatcherServlet extends HttpServlet {
             resp.sendError(404);
             return;
         }
+
         Command command = commands.get(key);
-        String result = command.execute(req);
+        String result;
+        try {
+             result = command.execute(req);
+        } catch (CashRegisterException e) {
+            resp.getWriter().print(e.getMessage());
+            return;
+        } catch (NumberFormatException e) {
+            resp.sendError(400);
+            return;
+        }
+
         if (result.contains(REDIRECT)) {
             resp.sendRedirect(result.replace(REDIRECT, ""));
         } else {

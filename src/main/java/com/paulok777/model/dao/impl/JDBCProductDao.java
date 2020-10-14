@@ -2,7 +2,6 @@ package com.paulok777.model.dao.impl;
 
 import com.paulok777.model.dao.ProductDao;
 import com.paulok777.model.dao.impl.query.ProductQueries;
-import com.paulok777.model.dao.impl.query.UserQueries;
 import com.paulok777.model.dao.mapper.ProductMapper;
 import com.paulok777.model.entity.Product;
 import com.paulok777.model.util.Page;
@@ -50,7 +49,21 @@ public class JDBCProductDao implements ProductDao {
 
     @Override
     public Page<Product> findByOrderByName(Pageable pageable) {
-        return null;
+        List<Product> products = new ArrayList<>();
+        try (Statement statement = connection.createStatement()) {
+            ResultSet rs = statement.executeQuery(ProductQueries.FIND_ALL_ORDER_BY_NAME);
+            while (rs.next()) {
+                products.add(productMapper.extractWithoutRelationsFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException();
+        }
+
+        int firstProductInPageIndex = pageable.getSizeOfPage() * pageable.getCurrentPage();
+        int lastProductInPageIndex = Math.min(products.size(), firstProductInPageIndex + pageable.getSizeOfPage());
+
+        List<Product> productsForPage = products.subList(firstProductInPageIndex, lastProductInPageIndex);
+        return new Page<>((int) Math.ceil((double)products.size() / pageable.getSizeOfPage()), productsForPage);
     }
 
     @Override

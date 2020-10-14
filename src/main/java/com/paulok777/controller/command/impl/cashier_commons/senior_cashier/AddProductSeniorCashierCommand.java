@@ -18,7 +18,7 @@ public class AddProductSeniorCashierCommand implements Command {
         String[] subUris = request.getRequestURI().split("/");
         String id = subUris[subUris.length - 1];
         CashierCommonFunctionality.addProductToOrder(orderService, id,
-                request.getParameter("productIdentifier"), Long.valueOf(request.getParameter("amount")));
+                request.getParameter("productIdentifier"), Long.parseLong(request.getParameter("amount")));
         return "redirect:/senior_cashier/orders/" + id;
     }
 }

@@ -26,7 +26,7 @@ CREATE TABLE "order_products" (
 
 CREATE TABLE "products" (
     "id" SERIAL PRIMARY KEY,
-	"code" INTEGER PRIMARY KEY,
+	"code" VARCHAR(255) NOT NULL,
 	"name" VARCHAR(255) NOT NULL,
 	"price" INTEGER NOT NULL,
 	"amount" INTEGER NOT NULL,
