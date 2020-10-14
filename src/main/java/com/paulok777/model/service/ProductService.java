@@ -27,7 +27,15 @@ public class ProductService {
 
     public void saveNewProduct(ProductDTO productDTO) {
         Product product = new Product(productDTO);
-        saveProduct(product);
+        try (ProductDao productDao = daoFactory.createProductDao()){
+            productDao.create(product);
+//            log.debug("(username: {}) Product saved successfully.",
+//                    userService.getCurrentUser().getUsername());
+        } catch (Exception e) {
+//            log.warn("(username: {}) {}.",
+//                    userService.getCurrentUser().getUsername(), ExceptionKeys.DUPLICATE_CODE_OR_NAME);
+            throw new DuplicateCodeOrNameException(ExceptionKeys.DUPLICATE_CODE_OR_NAME);
+        }
     }
 
     public void setAmountById(Long amount, Long id) {
@@ -50,15 +58,9 @@ public class ProductService {
         }
     }
 
-    public void saveProduct(Product product) {
-        try (ProductDao productDao = daoFactory.createProductDao()){
-            productDao.create(product);
-//            log.debug("(username: {}) Product saved successfully.",
-//                    userService.getCurrentUser().getUsername());
-        } catch (Exception e) {
-//            log.warn("(username: {}) {}.",
-//                    userService.getCurrentUser().getUsername(), ExceptionKeys.DUPLICATE_CODE_OR_NAME);
-            throw new DuplicateCodeOrNameException(ExceptionKeys.DUPLICATE_CODE_OR_NAME);
+    public void updateProduct(Product product) {
+        try (ProductDao productDao = daoFactory.createProductDao()) {
+            productDao.update(product);
         }
     }
 

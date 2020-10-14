@@ -17,6 +17,7 @@ import com.paulok777.model.util.ExceptionKeys;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+
 import com.atomikos.icatch.jta.UserTransactionImp;
 
 public class OrderService {
@@ -58,7 +59,7 @@ public class OrderService {
             throw new IllegalOrderStateException(ExceptionKeys.ILLEGAL_ORDER_STATE);
         }
 
-         return order.getOrderProducts()
+        return order.getOrderProducts()
                 .stream()
                 .filter(orderProducts -> orderProducts.getAmount() > 0)
                 .sorted(Comparator.comparing(op -> op.getProduct().getName()))
@@ -67,17 +68,17 @@ public class OrderService {
                         (x, y) -> y, LinkedHashMap::new));
     }
 
-//    @Transactional
+    //    @Transactional
     public void addProductToOrderByCodeOrName(String orderId, String productIdentifier, Long amount) {
         Order order = getOrderById(orderId);
         Product product = productService.findByIdentifier(productIdentifier);
 
         addProductToOrder(amount, order, product);
 
-        try (OrderDao orderDao = daoFactory.createOrderDao()){
-            orderDao.update(order);
+        try (OrderDao orderDao = daoFactory.createOrderDao()) {
+            orderDao.updateWithRelations(order);
         }
-        productService.saveProduct(product);
+        productService.updateProduct(product);
     }
 
     private void addProductToOrder(Long amount, Order order, Product product) {
@@ -104,7 +105,7 @@ public class OrderService {
         return orderProducts;
     }
 
-//    @Transactional
+    //    @Transactional
     public void changeAmountOfProduct(String orderId, String productId, Long amount) {
         Order order = getOrderById(orderId);
         Product product = getProductById(productId);
@@ -117,8 +118,9 @@ public class OrderService {
         calculateDataAfterChangingAmount(amount, order, product, orderProducts);
 
         try (OrderDao orderDao = daoFactory.createOrderDao()) {
-            orderDao.update(order);
+            orderDao.updateWithRelations(order);
         }
+        productService.updateProduct(product);
     }
 
     private void calculateDataAfterChangingAmount(Long amount, Order order, Product product, OrderProducts orderProducts) {
@@ -152,7 +154,7 @@ public class OrderService {
     }
 
     public void makeStatusClosed(String id) {
-        try (OrderDao orderDao = daoFactory.createOrderDao()){
+        try (OrderDao orderDao = daoFactory.createOrderDao()) {
             orderDao.changeStatusToClosed(Long.valueOf(id), OrderStatus.CLOSED);
         } catch (NumberFormatException e) {
 //            log.warn("(username: {}) {}}.",
@@ -161,14 +163,14 @@ public class OrderService {
         }
     }
 
-//    @Transactional
+    //    @Transactional
     public void cancelOrder(String id) {
         Order order = getOrderById(id);
 
         order.getOrderProducts().forEach(orderProducts -> {
             Product product = orderProducts.getProduct();
             product.setAmount(product.getAmount() + orderProducts.getAmount());
-            productService.saveProduct(product);
+            productService.updateProduct(product);
         });
 
         order.setStatus(OrderStatus.CANCELED);
@@ -177,7 +179,7 @@ public class OrderService {
         }
     }
 
-//    @Transactional
+    //    @Transactional
     public void cancelProduct(String orderId, String productId) {
         Order order = getOrderById(orderId);
         Product product = getProductById(productId);
@@ -193,8 +195,9 @@ public class OrderService {
         order.getOrderProducts().add(orderProducts);
 
         try (OrderDao orderDao = daoFactory.createOrderDao()) {
-            orderDao.update(order);
+            orderDao.updateWithRelations(order);
         }
+        productService.updateProduct(product);
     }
 
     public Order getOrderById(String id) {
@@ -269,12 +272,12 @@ public class OrderService {
                 .amount((long) orders.size())
                 .totalPrice(
                         orders.stream()
-                        .map(Order::getTotalPrice)
-                        .reduce(0L, Long::sum))
+                                .map(Order::getTotalPrice)
+                                .reduce(0L, Long::sum))
                 .build();
     }
 
-//    @Transactional
+    //    @Transactional
     public void archiveOrders(List<Order> orders) {
         orders.forEach(order -> {
             order.setStatus(OrderStatus.ARCHIVED);

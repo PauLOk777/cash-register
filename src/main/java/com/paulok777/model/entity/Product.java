@@ -150,4 +150,16 @@ public class Product {
             return new Product(id, code, name, price, amount, measure);
         }
     }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", amount=" + amount +
+                ", measure=" + measure +
+                '}';
+    }
 }

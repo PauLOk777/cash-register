@@ -10,7 +10,7 @@ public class UserMapper implements ObjectMapper<User> {
     @Override
     public User extractWithoutRelationsFromResultSet(ResultSet rs) throws SQLException {
         return User.builder()
-                .id(rs.getLong("id"))
+                .id(rs.getLong("user_id"))
                 .firstName(rs.getString("first_name"))
                 .lastName(rs.getString("last_name"))
                 .username(rs.getString("username"))

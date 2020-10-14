@@ -16,7 +16,7 @@ public class OrderMapper implements ObjectMapper<Order> {
     @Override
     public Order extractWithoutRelationsFromResultSet(ResultSet rs) throws SQLException {
         return Order.builder()
-                .id(rs.getLong("id"))
+                .id(rs.getLong("order_id"))
                 .createDate(rs.getTimestamp("create_date").toLocalDateTime())
                 .status(Order.OrderStatus.valueOf(rs.getString("status")))
                 .totalPrice(rs.getLong("total_price"))
@@ -36,7 +36,7 @@ public class OrderMapper implements ObjectMapper<Order> {
     }
 
     private OrderProducts extractOrderProductsFromResultSet(ResultSet rs, Order order, Product product) throws SQLException {
-        return new OrderProducts(order, product, rs.getLong("amount"));
+        return new OrderProducts(order, product, rs.getLong("amount_in_order"));
     }
 
     @Override

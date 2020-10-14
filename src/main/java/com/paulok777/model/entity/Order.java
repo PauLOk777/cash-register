@@ -143,4 +143,15 @@ public class Order {
             return new Order(this.id, this.totalPrice, this.createDate, this.status, this.user, this.orderProducts);
         }
     }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", totalPrice=" + totalPrice +
+                ", createDate=" + createDate +
+                ", status=" + status +
+                ", user=" + user +
+                '}';
+    }
 }

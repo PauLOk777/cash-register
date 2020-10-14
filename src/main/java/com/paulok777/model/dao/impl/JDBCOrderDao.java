@@ -101,12 +101,12 @@ public class JDBCOrderDao implements OrderDao {
 
         try (PreparedStatement statement = connection.prepareStatement(OrderQueries.FIND_BY_ID_WITH_RELATIONS)) {
             statement.setLong(1, id);
-
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
                 order = orderMapper.extractWithRelationsFromResultSet(rs, orders, users, products);
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RuntimeException();
         }
         return Optional.ofNullable(order);
@@ -150,6 +150,7 @@ public class JDBCOrderDao implements OrderDao {
             orderStatement.setTimestamp(1, Timestamp.valueOf(order.getCreateDate()));
             orderStatement.setString(2, order.getStatus().name());
             orderStatement.setLong(3, order.getTotalPrice());
+            orderStatement.setLong(4, order.getId());
 
             try (PreparedStatement orderProductsStatement =
                          connection.prepareStatement(OrderQueries.UPDATE_PRODUCT_AMOUNT_IN_ORDER)) {
@@ -173,6 +174,7 @@ public class JDBCOrderDao implements OrderDao {
             connection.commit();
         } catch (SQLException e) {
             try {
+                e.printStackTrace();
                 connection.rollback();
             } catch (SQLException e1) {
                 throw new RuntimeException();
