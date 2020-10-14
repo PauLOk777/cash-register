@@ -1,5 +1,6 @@
 package com.paulok777.controller.command.impl.cashier_commons;
 
+import com.paulok777.controller.util.Validator;
 import com.paulok777.model.entity.Order;
 import com.paulok777.model.entity.Product;
 import com.paulok777.model.service.OrderService;
@@ -26,6 +27,16 @@ public class CashierCommonFunctionality {
 
     public static long createNewOrder(OrderService orderService, HttpServletRequest request) {
         return orderService.saveNewOrder((String) request.getSession().getAttribute("username"));
+    }
+
+    public static void addProductToOrder(OrderService orderService, String id, String productIdentifier, Long amount) {
+        Validator.validateAmountForCashier(amount);
+        orderService.addProductToOrderByCodeOrName(id, productIdentifier, amount);
+    }
+
+    public static void changeAmountOfProduct(OrderService orderService, String orderId, String productId, Long amount) {
+        Validator.validateAmountForCashier(amount);
+        orderService.changeAmountOfProduct(orderId, productId, amount);
     }
 
     public static void closeOrder(OrderService orderService, HttpServletRequest request) {

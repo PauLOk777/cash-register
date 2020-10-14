@@ -26,7 +26,7 @@ public class RegistrationCommand implements Command {
                 .role(request.getParameter("role"))
                 .build();
 
-        Validator.validateUser(userDTO, request.getParameter("anonymous"));
+        Validator.validateUser(userDTO);
         userService.saveNewUser(userDTO);
         return "redirect:/login";
     }

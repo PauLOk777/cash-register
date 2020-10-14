@@ -6,7 +6,7 @@ import com.paulok777.model.exception.cash_register_exc.FieldValidationException;
 import com.paulok777.model.util.ExceptionKeys;
 
 public class Validator {
-    public static void validateUser(UserDTO userDTO, String username) {
+    public static void validateUser(UserDTO userDTO) {
 
         if (!userDTO.getFirstName().matches(ValidationRegex.FIRST_NAME_REGEX)) {
 //            log.warn("(username: {}) {}.", username, ExceptionKeys.INVALID_USER_FIRST_NAME);
@@ -44,7 +44,7 @@ public class Validator {
         }
     }
 
-    public static void validateProduct(ProductDTO productDTO, String username) {
+    public static void validateProduct(ProductDTO productDTO) {
 
         if (!productDTO.getCode().matches(ValidationRegex.CODE_REGEX)) {
 //            log.warn("(username: {}) {}.", username, ExceptionKeys.INVALID_PRODUCT_CODE);
@@ -61,7 +61,7 @@ public class Validator {
             throw new FieldValidationException(ExceptionKeys.INVALID_PRODUCT_PRICE);
         }
 
-        validateAmountForCommodityExpert(productDTO.getAmount(), username);
+        validateAmountForCommodityExpert(productDTO.getAmount());
 
         if (!productDTO.getMeasure().matches(ValidationRegex.MEASURE_REGEXP)) {
 //            log.warn("(username: {}) {}.", username, ExceptionKeys.INVALID_PRODUCT_MEASURE);
@@ -69,14 +69,14 @@ public class Validator {
         }
     }
 
-    public static void validateAmountForCommodityExpert(Long amount, String username) {
+    public static void validateAmountForCommodityExpert(Long amount) {
         if (amount < 0) {
 //            log.warn("(username: {}) {}.", username, ExceptionKeys.INVALID_AMOUNT_COMMODITY_EXPERT);
             throw new FieldValidationException(ExceptionKeys.INVALID_AMOUNT_COMMODITY_EXPERT);
         }
     }
 
-    public static void validateAmountForCashier(Long amount, String username) {
+    public static void validateAmountForCashier(Long amount) {
         if (amount < 1) {
 //            log.warn("(username: {}) {}.", username, ExceptionKeys.INVALID_AMOUNT_CASHIER);
             throw new FieldValidationException(ExceptionKeys.INVALID_AMOUNT_CASHIER);

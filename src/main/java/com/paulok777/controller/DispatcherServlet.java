@@ -56,15 +56,15 @@ public class DispatcherServlet extends HttpServlet {
         postCommands.put("commodity_expert/products", new CreateProductCommand());
         postCommands.put("commodity_expert/products/\\d+", new ChangeAmountOfProductCommand());
         postCommands.put("cashier/orders", new CreateNewOrderCashierCommand(serviceFactory.createOrderService()));
-        postCommands.put("cashier/orders/\\d+", new AddProductCashierCommand());
-        postCommands.put("cashier/orders/\\d+/\\d+", new ChangeAmountOfProductCashierCommand());
+        postCommands.put("cashier/orders/\\d+", new AddProductCashierCommand(serviceFactory.createOrderService()));
+        postCommands.put("cashier/orders/\\d+/\\d+", new ChangeAmountOfProductCashierCommand(serviceFactory.createOrderService()));
         postCommands.put("cashier/orders/close/\\d+", new CloseOrderCashierCommand(serviceFactory.createOrderService()));
         postCommands.put("senior_cashier/orders", new CreateNewOrderSeniorCashierCommand(serviceFactory.createOrderService()));
-        postCommands.put("senior_cashier/orders/\\d+", new AddProductSeniorCashierCommand());
-        postCommands.put("senior_cashier/orders/\\d+/\\d+", new ChangeAmountOfProductSeniorCashierCommand());
+        postCommands.put("senior_cashier/orders/\\d+", new AddProductSeniorCashierCommand(serviceFactory.createOrderService()));
+        postCommands.put("senior_cashier/orders/\\d+/\\d+", new ChangeAmountOfProductSeniorCashierCommand(serviceFactory.createOrderService()));
         postCommands.put("senior_cashier/orders/close/\\d+", new CloseOrderSeniorCashierCommand(serviceFactory.createOrderService()));
         postCommands.put("senior_cashier/orders/cancel/\\d+", new CancelOrderCommand(serviceFactory.createOrderService()));
-        postCommands.put("senior_cashier/orders/cancel/\\d+/\\d+", new CancelProductInOrderCommand());
+        postCommands.put("senior_cashier/orders/cancel/\\d+/\\d+", new CancelProductInOrderCommand(serviceFactory.createOrderService()));
     }
 
     @Override
