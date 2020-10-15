@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="/WEB-INF/tld/mytaglib.tld" prefix="mytg"%>
 <%@ page isELIgnored="false" %>
 
 <fmt:setLocale value="${sessionScope.lang}"/>
@@ -25,7 +26,6 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
             integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
             crossorigin="anonymous"></script>
-
 </head>
 <body class="d-flex flex-column min-vh-100">
 <%@include file="../../partials/commodityExpertHeader.jspf" %>
@@ -85,7 +85,7 @@
             <tr>
                 <th scope="row"><c:out value="${product.code}"/></th>
                 <td><c:out value="${product.name}"/></td>
-                <td class="priceToParse"><c:out value="${product.price}"/></td>
+                <td><mytg:price><c:out value="${product.price}"/></mytg:price></td>
                 <td><fmt:message key="${product.measure.name()}"/></td>
                 <td><c:out value="${product.amount}"/></td>
                 <td>

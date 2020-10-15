@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="/WEB-INF/tld/mytaglib.tld" prefix="mytg"%>
 <%@ page isELIgnored="false" %>
 
 <fmt:setLocale value="${sessionScope.lang}"/>
@@ -25,7 +26,6 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
             integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
             crossorigin="anonymous"></script>
-
 </head>
 <body class="d-flex flex-column min-vh-100">
 <%@include file="../../partials/cashierHeader.jspf" %>
@@ -51,7 +51,7 @@
                     <a href="/cashier/orders/<c:out value="${order.id}"/>"><c:out value="${order.id}"/></a>
                 </th>
                 <td><c:out value="${order.createDate}"/></td>
-                <td class="priceToParse"><c:out value="${order.totalPrice}"/></td>
+                <td><mytg:price><c:out value="${order.totalPrice}"/></mytg:price></td>
                 <td>
                     <form action="/cashier/orders/close/<c:out value="${order.id}"/>" method="post">
                         <button type="submit" class="btn btn-outline-success btn-sm">
