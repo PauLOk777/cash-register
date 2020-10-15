@@ -20,24 +20,45 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
+/**
+ * The Order service.
+ */
 public class OrderService {
     private final DaoFactory daoFactory;
     private final ProductService productService;
     private final UserService userService;
     private static final Logger logger = LogManager.getLogger(OrderService.class);
 
+    /**
+     * Instantiates a new Order service.
+     *
+     * @param daoFactory     the dao factory
+     * @param productService the product service
+     * @param userService    the user service
+     */
     public OrderService(final DaoFactory daoFactory, final ProductService productService, final UserService userService) {
         this.daoFactory = daoFactory;
         this.productService = productService;
         this.userService = userService;
     }
 
+    /**
+     * Gets orders.
+     *
+     * @return the orders
+     */
     public List<Order> getOrders() {
         try (OrderDao orderDao = daoFactory.createOrderDao()) {
             return orderDao.findByStatusOrderByCreateDateDesc(OrderStatus.NEW);
         }
     }
 
+    /**
+     * Save new order and return new generated id.
+     *
+     * @param username the username of user that creates order
+     * @return id (long)
+     */
     public long saveNewOrder(String username) {
         try (OrderDao orderDao = daoFactory.createOrderDao()) {
             return orderDao.createAndGetNewId(
@@ -52,6 +73,12 @@ public class OrderService {
         }
     }
 
+    /**
+     * Gets products by order id and sorted by name.
+     *
+     * @param id the id of order
+     * @return order products
+     */
     public Map<Long, Product> getProductsByOrderId(String id) {
         Order order = getOrderById(id);
         if (!order.getStatus().equals(OrderStatus.NEW)) {
@@ -68,7 +95,14 @@ public class OrderService {
                         (x, y) -> y, LinkedHashMap::new));
     }
 
-    //    @Transactional
+    /**
+     * Add product to order by code or name.
+     *
+     * @param orderId           the order id
+     * @param productIdentifier the product identifier
+     * @param amount            the amount
+     */
+//    @Transactional
     public void addProductToOrderByCodeOrName(String orderId, String productIdentifier, Long amount) {
         Order order = getOrderById(orderId);
         Product product = productService.findByIdentifier(productIdentifier);
@@ -105,7 +139,14 @@ public class OrderService {
         return orderProducts;
     }
 
-    //    @Transactional
+    /**
+     * Change amount of product.
+     *
+     * @param orderId   the order id
+     * @param productId the product id
+     * @param amount    the amount
+     */
+//    @Transactional
     public void changeAmountOfProduct(String orderId, String productId, Long amount) {
         Order order = getOrderById(orderId);
         Product product = getProductById(productId);
@@ -151,6 +192,11 @@ public class OrderService {
         }
     }
 
+    /**
+     * Make status closed.
+     *
+     * @param id the order id
+     */
     public void makeStatusClosed(String id) {
         try (OrderDao orderDao = daoFactory.createOrderDao()) {
             orderDao.changeStatusToClosed(Long.valueOf(id), OrderStatus.CLOSED);
@@ -160,7 +206,12 @@ public class OrderService {
         }
     }
 
-    //    @Transactional
+    /**
+     * Cancel order.
+     *
+     * @param id the order id
+     */
+//    @Transactional
     public void cancelOrder(String id) {
         Order order = getOrderById(id);
 
@@ -176,7 +227,13 @@ public class OrderService {
         }
     }
 
-    //    @Transactional
+    /**
+     * Cancel product in order.
+     *
+     * @param orderId   the order id
+     * @param productId the product id
+     */
+//    @Transactional
     public void cancelProduct(String orderId, String productId) {
         Order order = getOrderById(orderId);
         Product product = getProductById(productId);
@@ -197,6 +254,12 @@ public class OrderService {
         productService.updateProduct(product);
     }
 
+    /**
+     * Gets order by id.
+     *
+     * @param id the order id
+     * @return the order
+     */
     public Order getOrderById(String id) {
         try (OrderDao orderDao = daoFactory.createOrderDao()) {
             Optional<Order> order = orderDao.findById(Long.parseLong(id));
@@ -207,6 +270,12 @@ public class OrderService {
         }
     }
 
+    /**
+     * Gets product by id.
+     *
+     * @param id the product id
+     * @return the product
+     */
     public Product getProductById(String id) {
         try {
             return parseOptionalAndThrowInvalidId(productService.findById(Long.parseLong(id)));
@@ -245,10 +314,20 @@ public class OrderService {
                 });
     }
 
+    /**
+     * Make x report.
+     *
+     * @return the report dto
+     */
     public ReportDTO makeXReport() {
         return getReportInfo(getClosedOrders());
     }
 
+    /**
+     * Make z report.
+     *
+     * @return the report dto
+     */
     public ReportDTO makeZReport() {
         List<Order> orders = getClosedOrders();
         archiveOrders(orders);
@@ -271,7 +350,12 @@ public class OrderService {
                 .build();
     }
 
-    //    @Transactional
+    /**
+     * Archive orders.
+     *
+     * @param orders the orders
+     */
+//    @Transactional
     public void archiveOrders(List<Order> orders) {
         orders.forEach(order -> {
             order.setStatus(OrderStatus.ARCHIVED);

@@ -14,20 +14,39 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Optional;
 
+/**
+ * The Product service.
+ */
 public class ProductService {
     private final DaoFactory daoFactory;
     private static final Logger logger = LogManager.getLogger(ProductService.class);
 
+    /**
+     * Instantiates a new Product service.
+     *
+     * @param daoFactory the dao factory
+     */
     public ProductService(final DaoFactory daoFactory) {
         this.daoFactory = daoFactory;
     }
 
+    /**
+     * Gets products.
+     *
+     * @param pageable the pageable
+     * @return the products
+     */
     public Page<Product> getProducts(Pageable pageable) {
         try (ProductDao productDao = daoFactory.createProductDao()) {
             return productDao.findByOrderByName(pageable);
         }
     }
 
+    /**
+     * Save new product.
+     *
+     * @param productDTO the product dto
+     */
     public void saveNewProduct(ProductDTO productDTO) {
         Product product = new Product(productDTO);
         try (ProductDao productDao = daoFactory.createProductDao()){
@@ -39,6 +58,12 @@ public class ProductService {
         }
     }
 
+    /**
+     * Sets amount of product in storage.
+     *
+     * @param amount the amount
+     * @param id     the product id
+     */
     public void setAmountById(Long amount, Long id) {
         try (ProductDao productDao = daoFactory.createProductDao()) {
             productDao.updateAmountById(amount, id);
@@ -46,6 +71,12 @@ public class ProductService {
         logger.debug("Set new amount to product was done successfully.");
     }
 
+    /**
+     * Find product by identifier.
+     *
+     * @param identifier the identifier (code or name)
+     * @return the product
+     */
     public Product findByIdentifier(String identifier) {
         try (ProductDao productDao = daoFactory.createProductDao()) {
             return productDao.findByIdentifier(identifier).orElseThrow(
@@ -57,12 +88,23 @@ public class ProductService {
         }
     }
 
+    /**
+     * Update product.
+     *
+     * @param product the product
+     */
     public void updateProduct(Product product) {
         try (ProductDao productDao = daoFactory.createProductDao()) {
             productDao.update(product);
         }
     }
 
+    /**
+     * Find product (optional) by id.
+     *
+     * @param id the product id
+     * @return the product (optional)
+     */
     public Optional<Product> findById(Long id) {
         try (ProductDao productDao = daoFactory.createProductDao()) {
             return productDao.findById(id);

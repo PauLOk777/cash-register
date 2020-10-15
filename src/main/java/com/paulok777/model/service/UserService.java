@@ -12,16 +12,30 @@ import com.paulok777.model.util.ExceptionKeys;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * The User service.
+ */
 public class UserService {
     private final DaoFactory daoFactory;
     private final PasswordEncoder passwordEncoder;
     private static final Logger logger = LogManager.getLogger(UserService.class);
 
+    /**
+     * Instantiates a new User service.
+     *
+     * @param daoFactory      the dao factory
+     * @param passwordEncoder the password encoder
+     */
     public UserService(DaoFactory daoFactory, PasswordEncoder passwordEncoder) {
         this.daoFactory = daoFactory;
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * Save new user.
+     *
+     * @param userDTO the user dto
+     */
     public void saveNewUser(UserDTO userDTO) {
         User user = new User(userDTO);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -33,6 +47,12 @@ public class UserService {
         }
     }
 
+    /**
+     * Gets user by username.
+     *
+     * @param username the username
+     * @return the user
+     */
     public User getUserByUsername(String username) {
         try (UserDao userDao = daoFactory.createUserDao()) {
             return userDao.findByUsername(username)
@@ -43,6 +63,13 @@ public class UserService {
         }
     }
 
+    /**
+     * Check if user exists and get role of user.
+     *
+     * @param username the username
+     * @param password the password
+     * @return the role of user
+     */
     public User.Role checkUserAndGetRole(String username, String password) {
         try (UserDao userDao = daoFactory.createUserDao()) {
             User user = userDao.findByUsername(username)
