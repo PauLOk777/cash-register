@@ -1,5 +1,6 @@
 package com.paulok777.model.service;
 
+import com.paulok777.controller.util.PasswordEncoder;
 import com.paulok777.model.dao.DaoFactory;
 import com.paulok777.model.dao.UserDao;
 import com.paulok777.model.dto.UserDTO;
@@ -11,14 +12,16 @@ import com.paulok777.model.util.ExceptionKeys;
 
 public class UserService {
     private final DaoFactory daoFactory;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(DaoFactory daoFactory) {
+    public UserService(DaoFactory daoFactory, PasswordEncoder passwordEncoder) {
         this.daoFactory = daoFactory;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public void saveNewUser(UserDTO userDTO) {
         User user = new User(userDTO);
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         try (UserDao userDao = daoFactory.createUserDao()){
             userDao.create(user);
         } catch (Exception e) {
@@ -39,7 +42,7 @@ public class UserService {
         try (UserDao userDao = daoFactory.createUserDao()) {
             User user = userDao.findByUsername(username)
                     .orElseThrow(() -> new WrongUsernameException(ExceptionKeys.WRONG_USERNAME));
-            if (!user.getPassword().equals(password)) {
+            if (!user.getPassword().equals(passwordEncoder.encode(password))) {
                 throw new WrongPasswordException(ExceptionKeys.WRONG_PASSWORD);
             }
             return user.getRole();
