@@ -8,8 +8,11 @@ import com.paulok777.controller.command.impl.commodity_expert.CreateProductComma
 import com.paulok777.controller.command.impl.commodity_expert.GetProductsCommand;
 import com.paulok777.controller.command.impl.guest.*;
 import com.paulok777.controller.command.impl.cashier_commons.senior_cashier.*;
+import com.paulok777.controller.util.ResourceManager;
 import com.paulok777.model.exception.CashRegisterException;
 import com.paulok777.model.service.ServiceFactory;
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -18,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -26,6 +30,7 @@ public class DispatcherServlet extends HttpServlet {
     private final Map<String, Command> postCommands = new ConcurrentHashMap<>();
     private static final String REDIRECT = "redirect:";
     private static final String COMMAND_NOT_FOUND = "COMMAND NOT FOUND";
+//    private final Logger logger = LogManager.getLogger(DispatcherServlet.class.getName());
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -35,6 +40,7 @@ public class DispatcherServlet extends HttpServlet {
         ServiceFactory serviceFactory = ServiceFactory.getInstance();
         putGetCommands(serviceFactory);
         putPostCommands(serviceFactory);
+//        logger.info("All commands were initialized");
     }
 
     private void putGetCommands(ServiceFactory serviceFactory) {
@@ -81,6 +87,7 @@ public class DispatcherServlet extends HttpServlet {
     private void processRequest(HttpServletRequest req, HttpServletResponse resp, Map<String, Command> commands)
             throws IOException, ServletException {
         String path = req.getRequestURI();
+//        logger.info("Request uri: {}", path);
         path = path.replaceFirst("/", "");
         String key = commands
                 .keySet()
@@ -88,6 +95,7 @@ public class DispatcherServlet extends HttpServlet {
                 .filter(path::matches)
                 .findFirst()
                 .orElse(COMMAND_NOT_FOUND);
+//        logger.info("Command key: {}", key);
 
         if (key.equals(COMMAND_NOT_FOUND)) {
             resp.sendError(404);
@@ -99,7 +107,11 @@ public class DispatcherServlet extends HttpServlet {
         try {
              result = command.execute(req);
         } catch (CashRegisterException e) {
-            resp.getWriter().print(e.getMessage());
+            Locale locale = req.getSession().getAttribute("lang").toString().equals("en")
+                    ? Locale.ENGLISH
+                    : new Locale("ua");
+            resp.getWriter().print(ResourceManager.getMessage(e.getMessage(), locale));
+//            logger.warn("Cash register exception: {}", e.getMessage());
             return;
         } catch (NumberFormatException e) {
             resp.sendError(400);

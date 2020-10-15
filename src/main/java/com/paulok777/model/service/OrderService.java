@@ -7,7 +7,6 @@ import com.paulok777.model.entity.Order;
 import com.paulok777.model.entity.Order.OrderStatus;
 import com.paulok777.model.entity.OrderProducts;
 import com.paulok777.model.entity.Product;
-import com.paulok777.model.entity.User;
 import com.paulok777.model.exception.cash_register_exc.InvalidIdException;
 import com.paulok777.model.exception.cash_register_exc.order_exc.IllegalOrderStateException;
 import com.paulok777.model.exception.cash_register_exc.order_exc.NoSuchProductException;
@@ -18,7 +17,6 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.atomikos.icatch.jta.UserTransactionImp;
 
 public class OrderService {
     private final DaoFactory daoFactory;
