@@ -6,6 +6,8 @@ import com.paulok777.model.dao.mapper.ProductMapper;
 import com.paulok777.model.entity.Product;
 import com.paulok777.model.util.Page;
 import com.paulok777.model.util.Pageable;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import java.util.Optional;
 public class JDBCProductDao implements ProductDao {
     private final Connection connection;
     private final ProductMapper productMapper = new ProductMapper();
+    private static final Logger logger = LogManager.getLogger(JDBCProductDao.class);
 
     public JDBCProductDao(Connection connection) {
         this.connection = connection;
@@ -27,6 +30,7 @@ public class JDBCProductDao implements ProductDao {
             statement.setLong(2, id);
             statement.execute();
         } catch (SQLException e) {
+            logger.error("{}, when trying to update amount by id {} to {}", e.getMessage(), id, amount);
             throw new RuntimeException();
         }
     }
@@ -42,6 +46,7 @@ public class JDBCProductDao implements ProductDao {
                 product = productMapper.extractWithoutRelationsFromResultSet(rs);
             }
         } catch (SQLException e) {
+            logger.error("{}, when trying to find product by identifier {}", e.getMessage(), identifier);
             throw new RuntimeException();
         }
         return Optional.ofNullable(product);
@@ -56,6 +61,7 @@ public class JDBCProductDao implements ProductDao {
                 products.add(productMapper.extractWithoutRelationsFromResultSet(rs));
             }
         } catch (SQLException e) {
+            logger.error("{}, when trying to find all products sorted by name", e.getMessage());
             throw new RuntimeException();
         }
 
@@ -76,6 +82,7 @@ public class JDBCProductDao implements ProductDao {
             statement.setLong(5, entity.getAmount());
             statement.execute();
         } catch (SQLException e) {
+            logger.error("{}, when trying to create new product", e.getMessage());
             throw new RuntimeException();
         }
     }
@@ -90,6 +97,7 @@ public class JDBCProductDao implements ProductDao {
                 product = productMapper.extractWithoutRelationsFromResultSet(rs);
             }
         } catch (SQLException e) {
+            logger.error("{}, when trying to find product by id: {}", e.getMessage(), id);
             throw new RuntimeException();
         }
         return Optional.ofNullable(product);
@@ -104,6 +112,7 @@ public class JDBCProductDao implements ProductDao {
                 products.add(productMapper.extractWithoutRelationsFromResultSet(rs));
             }
         } catch (SQLException e) {
+            logger.error("{}, when trying to find all products", e.getMessage());
             throw new RuntimeException();
         }
         return products;
@@ -120,6 +129,7 @@ public class JDBCProductDao implements ProductDao {
             statement.setLong(6, entity.getId());
             statement.execute();
         } catch (SQLException e) {
+            logger.error("{}, when trying to update product", e.getMessage());
             throw new RuntimeException();
         }
     }
@@ -130,6 +140,7 @@ public class JDBCProductDao implements ProductDao {
             statement.setLong(1, id);
             statement.execute();
         } catch (SQLException e) {
+            logger.error("{}, when trying to delete product by id: {}", e.getMessage(), id);
             throw new RuntimeException();
         }
     }
@@ -139,6 +150,7 @@ public class JDBCProductDao implements ProductDao {
         try {
             connection.close();
         } catch (SQLException e) {
+            logger.error("{}, when trying to close connection", e.getMessage());
             throw new RuntimeException(e);
         }
     }

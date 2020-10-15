@@ -7,6 +7,8 @@ import com.paulok777.model.entity.Order;
 import com.paulok777.model.entity.OrderProducts;
 import com.paulok777.model.entity.Product;
 import com.paulok777.model.entity.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.*;
@@ -14,6 +16,7 @@ import java.util.*;
 public class JDBCOrderDao implements OrderDao {
     private final Connection connection;
     private final OrderMapper orderMapper = new OrderMapper();
+    private static final Logger logger = LogManager.getLogger(JDBCOrderDao.class);
 
     public JDBCOrderDao(Connection connection) {
         this.connection = connection;
@@ -26,6 +29,7 @@ public class JDBCOrderDao implements OrderDao {
             statement.setLong(2, id);
             statement.execute();
         } catch (SQLException e) {
+            logger.error("{}, when trying change status of order (id: {}) to closed", e.getMessage(), id);
             throw new RuntimeException();
         }
     }
@@ -40,6 +44,7 @@ public class JDBCOrderDao implements OrderDao {
                 orders.add(orderMapper.extractWithoutRelationsFromResultSet(rs));
             }
         } catch (SQLException e) {
+            logger.error("{}, when trying to find new orders by create date desc without relations", e.getMessage());
             throw new RuntimeException();
         }
         return orders;
@@ -55,6 +60,7 @@ public class JDBCOrderDao implements OrderDao {
                 orders.add(orderMapper.extractWithoutRelationsFromResultSet(rs));
             }
         } catch (SQLException e) {
+            logger.error("{}, when trying to find new orders without relations", e.getMessage());
             throw new RuntimeException();
         }
         return orders;
@@ -74,8 +80,10 @@ public class JDBCOrderDao implements OrderDao {
                 return rs.getInt(1);
             }
         } catch (SQLException e) {
+            logger.error("{}, when trying create new order and get new id", e.getMessage());
             throw new RuntimeException();
         }
+        logger.error("Some problems with getting new id.");
         throw new RuntimeException();
     }
 
@@ -88,6 +96,7 @@ public class JDBCOrderDao implements OrderDao {
             statement.setLong(4, entity.getUser().getId());
             statement.execute();
         } catch (SQLException e) {
+            logger.error("{}, when trying create new order", e.getMessage());
             throw new RuntimeException();
         }
     }
@@ -106,7 +115,7 @@ public class JDBCOrderDao implements OrderDao {
                 order = orderMapper.extractWithRelationsFromResultSet(rs, orders, users, products);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("{}, when trying to get order (id: {}) by id with relations", e.getMessage(), id);
             throw new RuntimeException();
         }
         return Optional.ofNullable(order);
@@ -124,6 +133,7 @@ public class JDBCOrderDao implements OrderDao {
                 orderMapper.extractWithRelationsFromResultSet(rs, orders, users, products);
             }
         } catch (SQLException e) {
+            logger.error("{}, when trying to find all orders", e.getMessage());
             throw new RuntimeException();
         }
 
@@ -139,6 +149,7 @@ public class JDBCOrderDao implements OrderDao {
             statement.setLong(4, entity.getId());
             statement.execute();
         } catch (SQLException e) {
+            logger.error("{}, when trying to update order", e.getMessage());
             throw new RuntimeException();
         }
     }
@@ -174,10 +185,10 @@ public class JDBCOrderDao implements OrderDao {
             connection.commit();
         } catch (SQLException e) {
             try {
-                e.printStackTrace();
+                logger.error("{}, when trying to update order with relations", e.getMessage());
                 connection.rollback();
             } catch (SQLException e1) {
-                throw new RuntimeException();
+                logger.error("{}, when trying to rollback", e.getMessage());
             }
         }
     }
@@ -188,6 +199,7 @@ public class JDBCOrderDao implements OrderDao {
             statement.setLong(1, id);
             statement.execute();
         } catch (SQLException e) {
+            logger.error("{}, when trying to delete order (id: {})", e.getMessage(), id);
             throw new RuntimeException();
         }
     }
@@ -197,6 +209,7 @@ public class JDBCOrderDao implements OrderDao {
         try {
             connection.close();
         } catch (SQLException e) {
+            logger.error("{}, when trying to close connection", e.getMessage());
             throw new RuntimeException(e);
         }
     }

@@ -5,6 +5,8 @@ import com.paulok777.model.entity.Product;
 import com.paulok777.model.service.ProductService;
 import com.paulok777.model.util.Page;
 import com.paulok777.model.util.Pageable;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.stream.IntStream;
 
 public class GetProductsCommand implements Command {
     private final ProductService productService;
+    private static final Logger logger = LogManager.getLogger(GetProductsCommand.class.getName());
 
     public GetProductsCommand(ProductService productService) {
         this.productService = productService;
@@ -22,6 +25,7 @@ public class GetProductsCommand implements Command {
     public String execute(HttpServletRequest request) {
         String page = request.getParameter("page");
         String size = request.getParameter("size");
+        logger.info("page: {}, size: {}", page, size);
         int currentPage = page == null ? 1 : Integer.parseInt(page);
         int pageSize = size == null ? 2 : Integer.parseInt(size);
         Page<Product> productPage = productService.getProducts(new Pageable(currentPage - 1, pageSize));

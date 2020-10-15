@@ -1,6 +1,8 @@
 package com.paulok777.controller.filter;
 
 import com.paulok777.model.entity.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +16,7 @@ public class AuthFilter implements Filter {
     private static final String COMMODITY_EXPERT_DOMAIN = "/commodity_expert";
     private static final String GUEST_DOMAIN = "^(/)$|^(/login)$|^(/registration)$";
     private static final String LOGOUT_DOMAIN = "/logout";
+    private static final Logger logger = LogManager.getLogger(AuthFilter.class);
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -27,7 +30,8 @@ public class AuthFilter implements Filter {
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
         HttpSession session = req.getSession();
         if (session.getAttribute("role") == null) {
-            setGuestRole(session);
+            session.setAttribute("role", User.Role.UNKNOWN.toString());
+            session.setAttribute("username", "Guest");
         }
 
         User.Role role = User.Role.valueOf(session.getAttribute("role").toString());
@@ -36,14 +40,12 @@ public class AuthFilter implements Filter {
                 resp.sendRedirect("/login");
                 return;
             }
+            logger.error("(username: {}) Forbidden uri: {}",
+                    session.getAttribute("username"), req.getRequestURI());
             resp.sendError(403);
             return;
         }
         filterChain.doFilter(servletRequest, servletResponse);
-    }
-
-    private void setGuestRole(HttpSession session) {
-        session.setAttribute("role", User.Role.UNKNOWN.toString());
     }
 
     private boolean checkAccess(String uri, User.Role role) {

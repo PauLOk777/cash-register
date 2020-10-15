@@ -11,8 +11,8 @@ import com.paulok777.controller.command.impl.cashier_commons.senior_cashier.*;
 import com.paulok777.controller.util.ResourceManager;
 import com.paulok777.model.exception.CashRegisterException;
 import com.paulok777.model.service.ServiceFactory;
-//import org.apache.logging.log4j.LogManager;
-//import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -30,7 +30,7 @@ public class DispatcherServlet extends HttpServlet {
     private final Map<String, Command> postCommands = new ConcurrentHashMap<>();
     private static final String REDIRECT = "redirect:";
     private static final String COMMAND_NOT_FOUND = "COMMAND NOT FOUND";
-//    private final Logger logger = LogManager.getLogger(DispatcherServlet.class.getName());
+    private static final Logger logger = LogManager.getLogger(DispatcherServlet.class);
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -40,7 +40,7 @@ public class DispatcherServlet extends HttpServlet {
         ServiceFactory serviceFactory = ServiceFactory.getInstance();
         putGetCommands(serviceFactory);
         putPostCommands(serviceFactory);
-//        logger.info("All commands were initialized");
+        logger.info("All commands were initialized");
     }
 
     private void putGetCommands(ServiceFactory serviceFactory) {
@@ -87,7 +87,7 @@ public class DispatcherServlet extends HttpServlet {
     private void processRequest(HttpServletRequest req, HttpServletResponse resp, Map<String, Command> commands)
             throws IOException, ServletException {
         String path = req.getRequestURI();
-//        logger.info("Request uri: {}", path);
+        logger.info("(username: {}) request uri: {}", req.getSession().getAttribute("username"), path);
         path = path.replaceFirst("/", "");
         String key = commands
                 .keySet()
@@ -95,9 +95,10 @@ public class DispatcherServlet extends HttpServlet {
                 .filter(path::matches)
                 .findFirst()
                 .orElse(COMMAND_NOT_FOUND);
-//        logger.info("Command key: {}", key);
+        logger.info("Command key: {}", key);
 
         if (key.equals(COMMAND_NOT_FOUND)) {
+            logger.warn("(username: {}) error 404: page not found", req.getSession().getAttribute("username"));
             resp.sendError(404);
             return;
         }
@@ -111,9 +112,12 @@ public class DispatcherServlet extends HttpServlet {
                     ? Locale.ENGLISH
                     : new Locale("ua");
             resp.getWriter().print(ResourceManager.getMessage(e.getMessage(), locale));
-//            logger.warn("Cash register exception: {}", e.getMessage());
+            logger.error("(username: {}) cash register exception: {}",
+                    req.getSession().getAttribute("username"), e.getMessage());
             return;
         } catch (NumberFormatException e) {
+            logger.error("(username: {}) number format exception (bad request): {}",
+                    req.getSession().getAttribute("username"), e.getMessage());
             resp.sendError(400);
             return;
         }

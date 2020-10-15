@@ -4,6 +4,8 @@ import com.paulok777.model.dao.UserDao;
 import com.paulok777.model.dao.impl.query.UserQueries;
 import com.paulok777.model.dao.mapper.UserMapper;
 import com.paulok777.model.entity.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,6 +15,7 @@ import java.util.Optional;
 public class JDBCUserDao implements UserDao {
     private final Connection connection;
     private final UserMapper userMapper = new UserMapper();
+    private static final Logger logger = LogManager.getLogger(JDBCUserDao.class);
 
     public JDBCUserDao(Connection connection) {
         this.connection = connection;
@@ -28,6 +31,7 @@ public class JDBCUserDao implements UserDao {
                 user = userMapper.extractWithoutRelationsFromResultSet(rs);
             }
         } catch (SQLException e) {
+            logger.error("{}, when trying to find user by username: {}", e.getMessage(), username);
             throw new RuntimeException();
         }
         return Optional.ofNullable(user);
@@ -45,6 +49,7 @@ public class JDBCUserDao implements UserDao {
             statement.setString(7, entity.getRole().getAuthority());
             statement.execute();
         } catch (SQLException e) {
+            logger.error("{}, when trying to create new user", e.getMessage());
             throw new RuntimeException();
         }
     }
@@ -59,6 +64,7 @@ public class JDBCUserDao implements UserDao {
                 user = userMapper.extractWithoutRelationsFromResultSet(rs);
             }
         } catch (SQLException e) {
+            logger.error("{}, when trying to find user by id: {}", e.getMessage(), id);
             throw new RuntimeException();
         }
         return Optional.ofNullable(user);
@@ -73,6 +79,7 @@ public class JDBCUserDao implements UserDao {
                 users.add(userMapper.extractWithoutRelationsFromResultSet(rs));
             }
         } catch (SQLException e) {
+            logger.error("{}, when trying to find all users", e.getMessage());
             throw new RuntimeException();
         }
         return users;
@@ -90,6 +97,7 @@ public class JDBCUserDao implements UserDao {
             statement.setString(7, entity.getRole().getAuthority());
             statement.execute();
         } catch (SQLException e) {
+            logger.error("{}, when trying to update user", e.getMessage());
             throw new RuntimeException();
         }
     }
@@ -100,6 +108,7 @@ public class JDBCUserDao implements UserDao {
             statement.setLong(1, id);
             statement.execute();
         } catch (SQLException e) {
+            logger.error("{}, when trying to delete user by id: {}", e.getMessage(), id);
             throw new RuntimeException();
         }
     }
@@ -109,6 +118,7 @@ public class JDBCUserDao implements UserDao {
         try {
             connection.close();
         } catch (SQLException e) {
+            logger.error("{}, when trying to close connection", e.getMessage());
             throw new RuntimeException(e);
         }
     }

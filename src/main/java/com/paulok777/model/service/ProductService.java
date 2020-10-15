@@ -9,11 +9,14 @@ import com.paulok777.model.entity.Product;
 import com.paulok777.model.exception.cash_register_exc.order_exc.NoSuchProductException;
 import com.paulok777.model.exception.cash_register_exc.product_exc.DuplicateCodeOrNameException;
 import com.paulok777.model.util.ExceptionKeys;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Optional;
 
 public class ProductService {
     private final DaoFactory daoFactory;
+    private static final Logger logger = LogManager.getLogger(ProductService.class);
 
     public ProductService(final DaoFactory daoFactory) {
         this.daoFactory = daoFactory;
@@ -29,11 +32,9 @@ public class ProductService {
         Product product = new Product(productDTO);
         try (ProductDao productDao = daoFactory.createProductDao()){
             productDao.create(product);
-//            log.debug("(username: {}) Product saved successfully.",
-//                    userService.getCurrentUser().getUsername());
+            logger.debug("Product saved successfully.");
         } catch (Exception e) {
-//            log.warn("(username: {}) {}.",
-//                    userService.getCurrentUser().getUsername(), ExceptionKeys.DUPLICATE_CODE_OR_NAME);
+            logger.error("{}", ExceptionKeys.DUPLICATE_CODE_OR_NAME);
             throw new DuplicateCodeOrNameException(ExceptionKeys.DUPLICATE_CODE_OR_NAME);
         }
     }
@@ -42,16 +43,14 @@ public class ProductService {
         try (ProductDao productDao = daoFactory.createProductDao()) {
             productDao.updateAmountById(amount, id);
         }
-//        log.debug("(username: {}) Set new amount to product was done successfully.",
-//                userService.getCurrentUser().getUsername());
+        logger.debug("Set new amount to product was done successfully.");
     }
 
     public Product findByIdentifier(String identifier) {
         try (ProductDao productDao = daoFactory.createProductDao()) {
             return productDao.findByIdentifier(identifier).orElseThrow(
                     () -> {
-//                            log.warn("(username: {}) {}.",
-//                                    userService.getCurrentUser().getUsername(), ExceptionKeys.NO_SUCH_PRODUCTS);
+                        logger.error("{}", ExceptionKeys.NO_SUCH_PRODUCTS);
                         throw new NoSuchProductException(ExceptionKeys.NO_SUCH_PRODUCTS);
                     }
             );

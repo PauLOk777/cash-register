@@ -70,8 +70,7 @@ public class UserDTO {
     }
 
     public String toString() {
-        String var10000 = this.getUsername();
-        return "UserDTO(username=" + var10000 + ", password=" + this.getPassword() + ", firstName=" + this.getFirstName() + ", lastName=" + this.getLastName() + ", email=" + this.getEmail() + ", phoneNumber=" + this.getPhoneNumber() + ", role=" + this.getRole() + ")";
+        return "UserDTO(username=" + this.getUsername() + ", password=" + this.getPassword() + ", firstName=" + this.getFirstName() + ", lastName=" + this.getLastName() + ", email=" + this.getEmail() + ", phoneNumber=" + this.getPhoneNumber() + ", role=" + this.getRole() + ")";
     }
 
     public UserDTO(final String username, final String password, final String firstName, final String lastName, final String email, final String phoneNumber, final String role) {

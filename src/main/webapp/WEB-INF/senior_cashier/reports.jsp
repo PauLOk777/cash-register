@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="/WEB-INF/tld/mytaglib.tld" prefix="mytg"%>
 <%@ page isELIgnored="false" %>
 
 <fmt:setLocale value="${sessionScope.lang}"/>
@@ -40,7 +41,7 @@
         <tbody>
         <tr>
             <td><c:out value="${requestScope.report.amount}"/></td>
-            <td class="priceToParse"><c:out value="${requestScope.report.totalPrice}"/></td>
+            <td><mytg:price><c:out value="${requestScope.report.totalPrice}"/></mytg:price></td>
         </tr>
         </tbody>
     </table>

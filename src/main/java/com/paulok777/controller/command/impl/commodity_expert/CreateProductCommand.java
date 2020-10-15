@@ -5,11 +5,14 @@ import com.paulok777.controller.util.Validator;
 import com.paulok777.model.dto.ProductDTO;
 import com.paulok777.model.entity.Product;
 import com.paulok777.model.service.ProductService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
 public class CreateProductCommand implements Command {
     private final ProductService productService;
+    private static final Logger logger = LogManager.getLogger(CreateProductCommand.class.getName());
 
     public CreateProductCommand(ProductService productService) {
         this.productService = productService;
@@ -24,6 +27,8 @@ public class CreateProductCommand implements Command {
                 .measure(request.getParameter("measure"))
                 .amount(Long.parseLong(request.getParameter("amount")))
                 .build();
+
+        logger.debug("ProductDTO for new product: {}", productDTO);
 
         Validator.validateProduct(productDTO);
         productService.saveNewProduct(productDTO);

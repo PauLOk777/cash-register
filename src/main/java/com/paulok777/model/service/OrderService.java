@@ -12,6 +12,8 @@ import com.paulok777.model.exception.cash_register_exc.order_exc.IllegalOrderSta
 import com.paulok777.model.exception.cash_register_exc.order_exc.NoSuchProductException;
 import com.paulok777.model.exception.cash_register_exc.product_exc.NotEnoughProductsException;
 import com.paulok777.model.util.ExceptionKeys;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -22,6 +24,7 @@ public class OrderService {
     private final DaoFactory daoFactory;
     private final ProductService productService;
     private final UserService userService;
+    private static final Logger logger = LogManager.getLogger(OrderService.class);
 
     public OrderService(final DaoFactory daoFactory, final ProductService productService, final UserService userService) {
         this.daoFactory = daoFactory;
@@ -52,8 +55,7 @@ public class OrderService {
     public Map<Long, Product> getProductsByOrderId(String id) {
         Order order = getOrderById(id);
         if (!order.getStatus().equals(OrderStatus.NEW)) {
-//            log.warn("(username: {}) {}.",
-//                    userService.getCurrentUser().getUsername(), ExceptionKeys.ILLEGAL_ORDER_STATE);
+            logger.warn("Can't get order by id, because he hasn't status NEW");
             throw new IllegalOrderStateException(ExceptionKeys.ILLEGAL_ORDER_STATE);
         }
 
@@ -137,16 +139,14 @@ public class OrderService {
 
     private void checkIllegalOrderStateProductCanceled(OrderProducts orderProducts) {
         if (orderProducts.getAmount() < 1) {
-//            log.warn("(username: {}) {}.",
-//                    userService.getCurrentUser().getUsername(), ExceptionKeys.ILLEGAL_ORDER_STATE_PRODUCT_CANCELED);
+            logger.error("{}", ExceptionKeys.ILLEGAL_ORDER_STATE_PRODUCT_CANCELED);
             throw new NoSuchProductException(ExceptionKeys.ILLEGAL_ORDER_STATE_PRODUCT_CANCELED);
         }
     }
 
     private void checkProductAmount(Long amount, Long productAmount) {
         if (productAmount < amount) {
-//            log.warn("(username: {}) {}.",
-//                    userService.getCurrentUser().getUsername(), ExceptionKeys.NOT_ENOUGH_PRODUCTS);
+            logger.error("{}", ExceptionKeys.NOT_ENOUGH_PRODUCTS);
             throw new NotEnoughProductsException(ExceptionKeys.NOT_ENOUGH_PRODUCTS);
         }
     }
@@ -155,8 +155,7 @@ public class OrderService {
         try (OrderDao orderDao = daoFactory.createOrderDao()) {
             orderDao.changeStatusToClosed(Long.valueOf(id), OrderStatus.CLOSED);
         } catch (NumberFormatException e) {
-//            log.warn("(username: {}) {}}.",
-//                    userService.getCurrentUser().getUsername(), ExceptionKeys.INVALID_ID_EXCEPTION);
+            logger.error("{}", ExceptionKeys.INVALID_ID_EXCEPTION);
             throw new InvalidIdException(ExceptionKeys.INVALID_ID_EXCEPTION);
         }
     }
@@ -203,8 +202,7 @@ public class OrderService {
             Optional<Order> order = orderDao.findById(Long.parseLong(id));
             return parseOptionalAndThrowInvalidId(order);
         } catch (NumberFormatException e) {
-//            log.warn("(username: {}) {}}.",
-//                    userService.getCurrentUser().getUsername(), ExceptionKeys.INVALID_ID_EXCEPTION);
+            logger.error("{}", ExceptionKeys.INVALID_ID_EXCEPTION);
             throw new InvalidIdException(ExceptionKeys.INVALID_ID_EXCEPTION);
         }
     }
@@ -213,16 +211,14 @@ public class OrderService {
         try {
             return parseOptionalAndThrowInvalidId(productService.findById(Long.parseLong(id)));
         } catch (NumberFormatException e) {
-//            log.warn("(username: {}) {}}.",
-//                    userService.getCurrentUser().getUsername(), ExceptionKeys.INVALID_ID_EXCEPTION);
+            logger.error("{}.", ExceptionKeys.INVALID_ID_EXCEPTION);
             throw new InvalidIdException(ExceptionKeys.INVALID_ID_EXCEPTION);
         }
     }
 
     private <T> T parseOptionalAndThrowInvalidId(Optional<T> optional) {
         return optional.orElseThrow(() -> {
-//            log.warn("(username: {}) {}}.",
-//                    userService.getCurrentUser().getUsername(), ExceptionKeys.INVALID_ID_EXCEPTION);
+            logger.error("{}", ExceptionKeys.INVALID_ID_EXCEPTION);
             throw new InvalidIdException(ExceptionKeys.INVALID_ID_EXCEPTION);
         });
     }

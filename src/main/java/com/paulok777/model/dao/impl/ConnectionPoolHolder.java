@@ -1,6 +1,8 @@
 package com.paulok777.model.dao.impl;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.sql.DataSource;
 import java.io.FileReader;
@@ -9,6 +11,7 @@ import java.util.Properties;
 public class ConnectionPoolHolder {
     private static final String DB_PROPERTIES = "C://projects/cash-register/src/main/resources/db.properties";
     private static volatile DataSource dataSource;
+    private static final Logger logger = LogManager.getLogger(ConnectionPoolHolder.class);
 
     public static DataSource getDataSource() {
         if (dataSource == null) {
@@ -28,6 +31,7 @@ public class ConnectionPoolHolder {
                         ds.setDriverClassName(p.getProperty("db.driver.class.name"));
                         dataSource = ds;
                     } catch (Exception e) {
+                        logger.fatal("Problem with connecting to db: {}", e.getMessage());
                         System.exit(-1);
                     }
                 }
