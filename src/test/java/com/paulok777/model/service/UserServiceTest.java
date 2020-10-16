@@ -14,7 +14,11 @@ import org.junit.Test;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.doThrow;
 
 public class UserServiceTest {
     DaoFactory daoFactory = mock(DaoFactory.class);
@@ -40,7 +44,7 @@ public class UserServiceTest {
             .role(User.Role.valueOf(userDTO.getRole()))
             .build();
     @Test
-    public void testSaveNewUserShouldWorkWithoutExceptionsWhenDaoWorksFine() {
+    public void testSaveNewUserShouldWorkWithoutExceptionsWhenDaoDontGenerateExceptions() {
         when(daoFactory.createUserDao()).thenReturn(userDao);
         userService.saveNewUser(userDTO);
         verify(daoFactory, times(1)).createUserDao();
@@ -61,7 +65,7 @@ public class UserServiceTest {
         when(daoFactory.createUserDao()).thenReturn(userDao);
         when(userDao.findByUsername("PauL")).thenReturn(Optional.of(user));
         User userFromMethod = userService.getUserByUsername("PauL");
-        assertEquals(userFromMethod, user);
+        assertEquals(user, userFromMethod);
         verify(daoFactory, times(1)).createUserDao();
         verify(userDao, times(1)).findByUsername("PauL");
     }

@@ -9,7 +9,7 @@ import com.paulok777.model.entity.OrderProducts;
 import com.paulok777.model.entity.Product;
 import com.paulok777.model.exception.cash_register_exc.InvalidIdException;
 import com.paulok777.model.exception.cash_register_exc.order_exc.IllegalOrderStateException;
-import com.paulok777.model.exception.cash_register_exc.order_exc.NoSuchProductException;
+import com.paulok777.model.exception.cash_register_exc.product_exc.NoSuchProductException;
 import com.paulok777.model.exception.cash_register_exc.product_exc.NotEnoughProductsException;
 import com.paulok777.model.util.ExceptionKeys;
 import org.apache.logging.log4j.LogManager;

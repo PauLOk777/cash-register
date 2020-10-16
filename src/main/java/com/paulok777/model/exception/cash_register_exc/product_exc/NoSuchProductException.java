@@ -1,4 +1,4 @@
-package com.paulok777.model.exception.cash_register_exc.order_exc;
+package com.paulok777.model.exception.cash_register_exc.product_exc;
 
 import com.paulok777.model.exception.cash_register_exc.OrderException;
 
