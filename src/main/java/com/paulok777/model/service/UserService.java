@@ -39,7 +39,7 @@ public class UserService {
     public void saveNewUser(UserDTO userDTO) {
         User user = new User(userDTO);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        try (UserDao userDao = daoFactory.createUserDao()){
+        try (UserDao userDao = daoFactory.createUserDao()) {
             userDao.create(user);
         } catch (Exception e) {
             logger.error("{}.", ExceptionKeys.DUPLICATE_USERNAME);
