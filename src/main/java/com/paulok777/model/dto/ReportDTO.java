@@ -1,5 +1,7 @@
 package com.paulok777.model.dto;
 
+import java.util.Objects;
+
 public class ReportDTO {
     private Long amount;
     private Long totalPrice;
@@ -23,6 +25,20 @@ public class ReportDTO {
 
     public void setTotalPrice(final Long totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ReportDTO reportDTO = (ReportDTO) o;
+        return Objects.equals(amount, reportDTO.amount) &&
+                Objects.equals(totalPrice, reportDTO.totalPrice);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(amount, totalPrice);
     }
 
     public String toString() {

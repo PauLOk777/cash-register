@@ -49,7 +49,7 @@ public class OrderService {
      */
     public List<Order> getOrders() {
         try (OrderDao orderDao = daoFactory.createOrderDao()) {
-            return orderDao.findByStatusOrderByCreateDateDesc(OrderStatus.NEW);
+            return orderDao.findByStatusOrderByCreateDateDesc(Order.OrderStatus.NEW);
         }
     }
 
@@ -82,7 +82,7 @@ public class OrderService {
     public Map<Long, Product> getProductsByOrderId(String id) {
         Order order = getOrderById(id);
         if (!order.getStatus().equals(OrderStatus.NEW)) {
-            logger.warn("Can't get order by id, because he hasn't status NEW");
+            logger.error("Can't get order by id, because he hasn't status NEW");
             throw new IllegalOrderStateException(ExceptionKeys.ILLEGAL_ORDER_STATE);
         }
 
@@ -199,7 +199,7 @@ public class OrderService {
      */
     public void makeStatusClosed(String id) {
         try (OrderDao orderDao = daoFactory.createOrderDao()) {
-            orderDao.changeStatusToClosed(Long.valueOf(id), OrderStatus.CLOSED);
+            orderDao.changeStatusToClosed(Long.parseLong(id), OrderStatus.CLOSED);
         } catch (NumberFormatException e) {
             logger.error("{}", ExceptionKeys.INVALID_ID_EXCEPTION);
             throw new InvalidIdException(ExceptionKeys.INVALID_ID_EXCEPTION);
@@ -358,7 +358,7 @@ public class OrderService {
 //    @Transactional
     public void archiveOrders(List<Order> orders) {
         orders.forEach(order -> {
-            order.setStatus(OrderStatus.ARCHIVED);
+            order.setStatus(Order.OrderStatus.ARCHIVED);
             try (OrderDao orderDao = daoFactory.createOrderDao()) {
                 orderDao.update(order);
             }

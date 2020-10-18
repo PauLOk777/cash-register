@@ -25,13 +25,15 @@ public class ProductServiceTest {
     ProductDao productDao = mock(ProductDao.class);
     ProductService productService = new ProductService(daoFactory);
     Pageable pageable = new Pageable(0, 1);
+
     private final ProductDTO productDTO = ProductDTO.builder()
             .code("1234")
             .name("Banana")
             .price(100)
             .measure("BY_WEIGHT")
-            .amount(4000)
+            .amount(4000L)
             .build();
+
     private final Product product = Product.builder()
             .code(productDTO.getCode())
             .name(productDTO.getName())

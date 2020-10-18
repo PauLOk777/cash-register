@@ -25,6 +25,7 @@ public class UserServiceTest {
     PasswordEncoder passwordEncoder = new MD5PasswordEncoder();
     UserDao userDao = mock(UserDao.class);
     UserService userService = new UserService(daoFactory, passwordEncoder);
+
     private final UserDTO userDTO = UserDTO.builder()
             .firstName("Pavlo")
             .lastName("Trotsiuk")
@@ -34,6 +35,7 @@ public class UserServiceTest {
             .phoneNumber("888888888")
             .role("CASHIER")
             .build();
+
     private final User user = User.builder()
             .firstName(userDTO.getFirstName())
             .lastName(userDTO.getLastName())
@@ -43,6 +45,7 @@ public class UserServiceTest {
             .phoneNumber(userDTO.getPhoneNumber())
             .role(User.Role.valueOf(userDTO.getRole()))
             .build();
+
     @Test
     public void testSaveNewUserShouldWorkWithoutExceptionsWhenDaoDontGenerateExceptions() {
         when(daoFactory.createUserDao()).thenReturn(userDao);
