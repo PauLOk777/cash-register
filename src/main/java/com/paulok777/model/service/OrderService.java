@@ -18,6 +18,11 @@ import org.apache.logging.log4j.Logger;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import com.atomikos.icatch.jta.UserTransactionImp;
+
+import javax.transaction.NotSupportedException;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
 
 
 /**
@@ -104,6 +109,7 @@ public class OrderService {
      */
 //    @Transactional
     public void addProductToOrderByCodeOrName(String orderId, String productIdentifier, Long amount) {
+        UserTransaction userTransaction = openTransaction();
         Order order = getOrderById(orderId);
         Product product = productService.findByIdentifier(productIdentifier);
 
@@ -113,6 +119,8 @@ public class OrderService {
             orderDao.updateWithRelations(order);
         }
         productService.updateProduct(product);
+
+        closeTransaction(userTransaction);
     }
 
     private void addProductToOrder(Long amount, Order order, Product product) {
@@ -148,6 +156,7 @@ public class OrderService {
      */
 //    @Transactional
     public void changeAmountOfProduct(String orderId, String productId, Long amount) {
+        UserTransaction userTransaction = openTransaction();
         Order order = getOrderById(orderId);
         Product product = getProductById(productId);
 
@@ -162,6 +171,8 @@ public class OrderService {
             orderDao.updateWithRelations(order);
         }
         productService.updateProduct(product);
+
+        closeTransaction(userTransaction);
     }
 
     private void calculateDataAfterChangingAmount(Long amount, Order order, Product product, OrderProducts orderProducts) {
@@ -213,6 +224,7 @@ public class OrderService {
      */
 //    @Transactional
     public void cancelOrder(String id) {
+        UserTransaction userTransaction = openTransaction();
         Order order = getOrderById(id);
 
         order.getOrderProducts().forEach(orderProducts -> {
@@ -225,6 +237,8 @@ public class OrderService {
         try (OrderDao orderDao = daoFactory.createOrderDao()) {
             orderDao.update(order);
         }
+
+        closeTransaction(userTransaction);
     }
 
     /**
@@ -235,6 +249,7 @@ public class OrderService {
      */
 //    @Transactional
     public void cancelProduct(String orderId, String productId) {
+        UserTransaction userTransaction = openTransaction();
         Order order = getOrderById(orderId);
         Product product = getProductById(productId);
 
@@ -252,6 +267,8 @@ public class OrderService {
             orderDao.updateWithRelations(order);
         }
         productService.updateProduct(product);
+
+        closeTransaction(userTransaction);
     }
 
     /**
@@ -357,11 +374,36 @@ public class OrderService {
      */
 //    @Transactional
     public void archiveOrders(List<Order> orders) {
+        UserTransaction userTransaction = openTransaction();
         orders.forEach(order -> {
             order.setStatus(Order.OrderStatus.ARCHIVED);
             try (OrderDao orderDao = daoFactory.createOrderDao()) {
                 orderDao.update(order);
             }
         });
+        closeTransaction(userTransaction);
+    }
+
+    private UserTransaction openTransaction() {
+        UserTransactionImp userTransactionImp = new UserTransactionImp();
+        try {
+            userTransactionImp.begin();
+        } catch (NotSupportedException | SystemException e) {
+            logger.fatal("Can't start transaction.");
+            throw new RuntimeException();
+        }
+        return userTransactionImp;
+    }
+
+    private void closeTransaction(UserTransaction userTransaction) {
+        try {
+            userTransaction.commit();
+        } catch (Exception e) {
+            try {
+                userTransaction.rollback();
+            } catch (Exception e1) {
+                logger.fatal("Can't manage transaction {}", e1.getMessage());
+            }
+        }
     }
 }
