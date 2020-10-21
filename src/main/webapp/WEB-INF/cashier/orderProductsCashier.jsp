@@ -62,13 +62,13 @@
             <tbody>
             <c:forEach var="product" items="${products}">
                 <tr>
-                    <th scope="row"><c:out value="${product.value.code}"/></th>
-                    <td><c:out value="${product.value.name}"/></td>
-                    <td><mytg:price><c:out value="${product.value.price}"/></mytg:price></td>
-                    <td><fmt:message key="${product.value.measure.name()}"/></td>
-                    <td><c:out value="${product.key}"/></td>
+                    <th scope="row"><c:out value="${product.key.code}"/></th>
+                    <td><c:out value="${product.key.name}"/></td>
+                    <td><mytg:price><c:out value="${product.key.price}"/></mytg:price></td>
+                    <td><fmt:message key="${product.key.measure.name()}"/></td>
+                    <td><c:out value="${product.value}"/></td>
                     <td>
-                        <form action="/cashier/orders/<c:out value="${orderId}"/>/<c:out value="${product.value.id}"/>"
+                        <form action="/cashier/orders/<c:out value="${orderId}"/>/<c:out value="${product.key.id}"/>"
                               method="post" class="form-inline">
                             <div class="form-group mx-sm-1 input-group-sm">
                                 <input type="number" name="amount" class="form-control"/>

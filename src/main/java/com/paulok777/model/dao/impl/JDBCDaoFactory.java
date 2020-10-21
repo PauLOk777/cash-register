@@ -4,6 +4,8 @@ import com.paulok777.model.dao.DaoFactory;
 import com.paulok777.model.dao.OrderDao;
 import com.paulok777.model.dao.ProductDao;
 import com.paulok777.model.dao.UserDao;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -11,6 +13,7 @@ import java.sql.SQLException;
 
 public class JDBCDaoFactory extends DaoFactory {
     private final DataSource dataSource = ConnectionPoolHolder.getDataSource();
+    private static final Logger logger = LogManager.getLogger(JDBCDaoFactory.class);
 
     @Override
     public UserDao createUserDao() {
@@ -31,6 +34,7 @@ public class JDBCDaoFactory extends DaoFactory {
         try {
             return dataSource.getConnection();
         } catch (SQLException e) {
+            logger.error(e.getMessage());
             throw new RuntimeException(e);
         }
     }

@@ -113,12 +113,12 @@ public class OrderServiceTest {
     public void testGetProductsByOrderIdShouldReturnLinkedHashMapWithOneElementWhenOrderWithThisIdExist() {
         String id = "1";
         long amount = 1L;
-        LinkedHashMap<Long, Product> expectedProducts = new LinkedHashMap<>();
-        expectedProducts.put(amount, product1);
-        expectedProducts.put(amount, product2);
+        LinkedHashMap<Product, Long> expectedProducts = new LinkedHashMap<>();
+        expectedProducts.put(product1, amount);
+        expectedProducts.put(product2, amount);
         when(daoFactory.createOrderDao()).thenReturn(orderDao);
         when(orderDao.findById(Long.parseLong(id))).thenReturn(Optional.of(order));
-        Map<Long, Product> products = orderService.getProductsByOrderId(id);
+        Map<Product, Long> products = orderService.getProductsByOrderId(id);
         assertEquals(expectedProducts, products);
         verify(daoFactory, times(1)).createOrderDao();
         verify(orderDao, times(1)).findById(Long.parseLong(id));

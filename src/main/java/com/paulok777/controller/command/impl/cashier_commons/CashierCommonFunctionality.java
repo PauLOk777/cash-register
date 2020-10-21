@@ -25,7 +25,7 @@ public class CashierCommonFunctionality {
         String[] subUris = request.getRequestURI().split("/");
         String id = subUris[subUris.length - 1];
         logger.info("get order by id: {}", id);
-        Map<Long, Product> products = orderService.getProductsByOrderId(id);
+        Map<Product, Long> products = orderService.getProductsByOrderId(id);
         session.setAttribute("orderId", id);
         session.setAttribute("products", products);
     }
